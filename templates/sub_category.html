@@ -1,0 +1,64 @@
+{% extends  'base.html' %}
+{% load static %}
+{% block main_content %}
+<h2 class="text-center mt-3">Select Category</h2>
+<!-- Carousel wrapper -->
+<div id="carouselBasicExample" class="carousel slide carousel-fade mb-2" data-mdb-carousel-init>
+    <!-- Indicators -->
+ 
+    <!-- Inner -->
+    <div class="carousel-inner">
+        <a href="/subscriptions-details">
+            <div class="carousel-item active">
+                <img src="../static/img/car1.png" class="d-block w-100" alt="Sunset Over the City"/>
+                <div class="carousel-caption d-none d-md-block">
+                 
+                </div>
+              </div>
+              
+        </a>
+      <!-- Single item -->
+    
+      <!-- Single item -->
+      <a href="/subscriptions-details">
+        <div class="carousel-item">
+            <img src="../static/img/car2.png" class="d-block w-100" alt="Canyon at Nigh"/>
+            <div class="carousel-caption d-none d-md-block">
+             
+            </div>
+          </div>
+    
+      </a>
+  
+      <!-- Single item -->
+      <a href="/subscriptions-details">
+        <div class="carousel-item">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(23).webp" class="d-block w-100" alt="Cliff Above a Stormy Sea"/>
+            <div class="carousel-caption d-none d-md-block">
+             
+            </div>
+          </div>
+      </a>
+     
+    </div>
+    <!-- Inner -->
+  
+    <!-- Controls -->
+   <!-- Controls with inline style to change button color to black -->
+<button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev" style="color: #000000;">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="next" style="color: #000000;">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+  
+  </div>
+  <!-- Carousel wrapper -->
+
+
+
+{% endblock main_content %}
+
+
