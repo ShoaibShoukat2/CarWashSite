@@ -1,64 +1,148 @@
-{% extends  'base.html' %}
-{% load static %}
-{% block main_content %}
-<h2 class="text-center mt-3">Select Category</h2>
-<!-- Carousel wrapper -->
-<div id="carouselBasicExample" class="carousel slide carousel-fade mb-2" data-mdb-carousel-init>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription</title>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(#8360c3, #2ebf91);
+      color: white; /* Set text color to white */
+    }
+    .carousel-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .carousel-item img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .card {
+      border: 2px solid white; /* Add white border to each card */
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Carousel wrapper -->
+  <div id="carouselBasicExample" class="carousel slide carousel-fade"  data-mdb-carousel-init>
     <!-- Indicators -->
- 
+    <h2 class="text-center mt-4">You Choose the plan of you preference</h2>
     <!-- Inner -->
-    <div class="carousel-inner">
-        <a href="/subscriptions-details">
-            <div class="carousel-item active">
-                <img src="../static/img/car1.png" class="d-block w-100" alt="Sunset Over the City"/>
-                <div class="carousel-caption d-none d-md-block">
-                 
-                </div>
-              </div>
-              
-        </a>
+    <div class="carousel-inner ">
       <!-- Single item -->
-    
-      <!-- Single item -->
-      <a href="/subscriptions-details">
-        <div class="carousel-item">
-            <img src="../static/img/car2.png" class="d-block w-100" alt="Canyon at Nigh"/>
-            <div class="carousel-caption d-none d-md-block">
-             
-            </div>
-          </div>
-    
-      </a>
+      <div class="carousel-item active">
+          <img src="../static/img/carimage1.bin" class="d-block" width="400" height="400" alt="Sunset Over the City"/>
+          <div class="carousel-caption d-none d-md-block"></div>
+      </div>
   
       <!-- Single item -->
-      <a href="/subscriptions-details">
-        <div class="carousel-item">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(23).webp" class="d-block w-100" alt="Cliff Above a Stormy Sea"/>
-            <div class="carousel-caption d-none d-md-block">
-             
-            </div>
-          </div>
-      </a>
-     
+      <div class="carousel-item">
+          <img src="../static/img/carimage2.bin" class="d-block" width="400" height="400" alt="Canyon at Night"/>
+          <div class="carousel-caption d-none d-md-block"></div>
+      </div>
+  
+      <!-- Single item -->
+      <div class="carousel-item">
+          <img src="../static/img/carimage3.bin" class="d-block" width="400" height="400" alt="Cliff Above a Stormy Sea"/>
+          <div class="carousel-caption d-none d-md-block"></div>
+      </div>
+  
+      <!-- Single item -->
+      <div class="carousel-item">
+          <img src="../static/img/carimage4.bin" class="d-block" width="400" height="400" alt="Cliff Above a Stormy Sea"/>
+          <div class="carousel-caption d-none d-md-block"></div>
+      </div>
     </div>
-    <!-- Inner -->
   
     <!-- Controls -->
-   <!-- Controls with inline style to change button color to black -->
-<button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev" style="color: #000000;">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="next" style="color: #000000;">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-  
+    <button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
   <!-- Carousel wrapper -->
+</div>
 
+<div class="container mb-4">
+  <div class="row">
+    <div class="col-md-4 mt-2">
+      <div class="card border-white bg-transparent" >
+        <div class="card-header border-transparent">
+          Basic
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Basic Subscription</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Access to basic features</li>
+            <li class="list-group-item">Limited content</li>
+            <li class="list-group-item">No premium support</li>
+          </ul>
+        </div>
+        <div class="card-footer border-transparent">
+          $9.99/month
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mt-2">
+      <div class="card border-white bg-transparent">
+        <div class="card-header border-transparent">
+          Premium
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Premium Subscription</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Access to premium features</li>
+            <li class="list-group-item">Full content</li>
+            <li class="list-group-item">Priority support</li>
+          </ul>
+        </div>
+        <div class="card-footer border-transparent">
+          $19.99/month
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mt-2">
+      <div class="card border-white bg-transparent">
+        <div class="card-header border-transparent">
+          Gold
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Gold Subscription</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Access to all features</li>
+            <li class="list-group-item">Exclusive content</li>
+            <li class="list-group-item">24/7 premium support</li>
+          </ul>
+        </div>
+        <div class="card-footer border-transparent">
+          $29.99/month
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-{% endblock main_content %}
-
-
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"></script>
+  
+</body>
+</html>
