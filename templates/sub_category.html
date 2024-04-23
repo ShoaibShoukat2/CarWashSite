@@ -11,6 +11,8 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
   <!-- MDB -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
   
   <style>
     body {
@@ -33,15 +35,43 @@
     .card {
       border: 2px solid white; /* Add white border to each card */
     }
+/* Styling for back-to-top arrow */
+.back-to-top {
+  position: fixed;
+  top: 20px;
+  left: 20px; /* Adjust the left position */
+  z-index: 9999;
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0.5;
+}
+
+.back-to-top:hover {
+  opacity: 1;
+}
+
+/* Rotate the icon 180 degrees */
+.back-to-top i {
+  transform: rotate(270deg);
+}
+
+
   </style>
+
 </head>
 <body>
+  <a href="/" class="back-to-top"><i class="fas fa-arrow-up" style="color: white;"></i></a>
+
 
 <div class="container">
+  
   <!-- Carousel wrapper -->
   <div id="carouselBasicExample" class="carousel slide carousel-fade"  data-mdb-carousel-init>
     <!-- Indicators -->
     <h2 class="text-center mt-4">You Choose the plan of you preference</h2>
+    
     <!-- Inner -->
     <div class="carousel-inner ">
       <!-- Single item -->
@@ -68,6 +98,7 @@
           <div class="carousel-caption d-none d-md-block"></div>
       </div>
     </div>
+
   
     <!-- Controls -->
     <button class="carousel-control-prev" type="button" data-mdb-target="#carouselBasicExample" data-mdb-slide="prev">
