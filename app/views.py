@@ -22,7 +22,7 @@ def SubscriptionPage(request):
 
     return render(request,'sub_category.html')
 
-def SubscriptionDetails(request):
-    return render(request,'sub_details.html')
+# def SubscriptionDetails(request):
+#     return render(request,'sub_details.html')
 
 
