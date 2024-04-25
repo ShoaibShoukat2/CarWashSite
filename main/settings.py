@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 
 # 'carwashsite.pythonanywhere.com'
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app'
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
