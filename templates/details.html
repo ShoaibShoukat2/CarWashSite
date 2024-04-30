@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription Details</title>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(#8360c3, #2ebf91);
+      color: white; /* Set text color to white */
+    }
+    .carousel-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .carousel-item img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .card {
+      border: 2px solid white; /* Add white border to each card */
+    }
+/* Styling for back-to-top arrow */
+.back-to-top {
+  position: fixed;
+  top: 20px;
+  left: 20px; /* Adjust the left position */
+  z-index: 9999;
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0.5;
+}
+
+.back-to-top:hover {
+  opacity: 1;
+}
+
+/* Rotate the icon 180 degrees */
+.back-to-top i {
+  transform: rotate(270deg);
+}
+
+
+  </style>
+
+</head>
+<body>
+  <a href="/" class="back-to-top"><i class="fas fa-arrow-up" style="color: white;"></i></a>
+
+
+<div class="container">
+  
+  <!-- Carousel wrapper -->
+<!-- Carousel wrapper -->
+<div id="carouselBasicExample" class="carousel slide carousel-fade"  data-mdb-carousel-init>
+  <!-- Indicators -->
+  <h2 class="text-center mt-4">Pick Your Car</h2>
+  
+  <!-- Inner -->
+  <div class="carousel-inner">
+    <!-- Single item -->
+    {% if vehicle %}
+    <div class="carousel-item active">
+      <img src="{{ vehicle.file.url }}" class="d-block" width="400" height="400" alt="{{ vehicle.name }}"/>
+      <div class="carousel-caption d-none d-md-block"></div>
+      <h3 class="text-center mb-3">{{ vehicle.name }}</h3>
+    </div>
+    {% endif %}
+  </div>  
+</div>
+<!-- Carousel wrapper -->
+<div class="container mb-4">
+  <div class="row">
+    {% for subscription_name, package_list in sub_data.items %}
+      <div class="col-md-4 mt-2">
+        <div class="card border-white bg-transparent">
+          <div class="card-header border-transparent">
+            {{ subscription_name }} 
+          </div>
+
+          <div class="card-body">
+            {% for package_info in package_list %}
+              <h5 class="card-title">{{ package_info.name }}</h5>
+              <ul class="list-group list-group-flush">
+                {% for description_price in package_info.descriptions %}
+                  <div class="container mt-2 d-flex justify-content-between">
+                    <li class="list-group-item">{{ description_price.description }}</li>
+                    <li class="list-group-item">${{ description_price.price }}</li>
+                  </div>
+                {% endfor %}
+              </ul>
+              <div class="card-footer border-transparent">
+                <a href="/subscriptions/car-details/{{vehicle.id}}/package/{{package_info.id}}" class="btn btn-dark w-100">Subscribe</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"></script>
+  
+</body>
+</html>

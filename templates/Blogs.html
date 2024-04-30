@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Blog
+{% endblock title %}
+
+{% block main_content %}
+<section id="blog" class="blog">
+  <div class="container" data-aos="fade-up">
+
+    <div class="row">
+
+      <div class="col-lg-8">
+
+        <!-- Blog Post 1 -->
+        <article class="entry">
+          <div class="entry-content">
+            <h2 class="entry-title">Title of Blog Post 1</h2>
+            <p>This is the content of Blog Post 1. It can contain multiple paragraphs, images, and other media.</p>
+          </div>
+          <!-- Comments Section -->
+          <div class="comments">
+            <h3 class="comment-title">Comments</h3>
+            <ul class="list-unstyled">
+              <!-- Comment 1 for Blog Post 1 -->
+              <li class="media comment">
+                <img class="mr-3 rounded-circle" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" alt="User Avatar" style="width: 50px;">
+                <div class="media-body">
+                  <h5 class="mt-0 mb-1">John Doe</h5>
+                  <p class="mb-0">This is a sample comment on Blog Post 1.</p>
+                </div>
+              </li>
+              <!-- Comment 2 for Blog Post 1 -->
+              <li class="media comment">
+                <img class="mr-3 rounded-circle" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" alt="User Avatar" style="width: 50px;">
+                <div class="media-body">
+                  <h5 class="mt-0 mb-1">Jane Smith</h5>
+                  <p class="mb-0">Another sample comment on Blog Post 1.</p>
+                </div>
+              </li>
+            </ul>
+          </div><!-- End comments -->
+        </article><!-- End blog entry -->
+
+        <!-- Blog Post 2 -->
+        <article class="entry">
+          <div class="entry-content">
+            <h2 class="entry-title">Title of Blog Post 2</h2>
+            <p>This is the content of Blog Post 2. It can also contain multiple paragraphs, images, and other media.</p>
+          </div>
+          <!-- Comments Section -->
+          <div class="comments">
+            <h3 class="comment-title">Comments</h3>
+            <ul class="list-unstyled">
+              <!-- Comment 1 for Blog Post 2 -->
+              <li class="media comment">
+                <img class="mr-3 rounded-circle" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-3.jpg" alt="User Avatar" style="width: 50px;">
+                <div class="media-body">
+                  <h5 class="mt-0 mb-1">Alice Johnson</h5>
+                  <p class="mb-0">Sample comment on Blog Post 2.</p>
+                </div>
+              </li>
+            </ul>
+          </div><!-- End comments -->
+        </article><!-- End blog entry -->
+
+      </div><!-- End col-lg-8 -->
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+
+        <div class="sidebar">
+          <!-- Sidebar Widget: About Author -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">About Author</h3>
+            <div class="author">
+              <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-4.jpg" alt="Author Avatar" class="rounded-circle">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at ipsum ac mi bibendum consectetur.</p>
+            </div>
+          </div><!-- End Sidebar Widget: About Author -->
+
+          <!-- Sidebar Widget: Categories -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Categories</h3>
+            <ul class="categories">
+              <li><a href="#">Category 1</a></li>
+              <li><a href="#">Category 2</a></li>
+              <li><a href="#">Category 3</a></li>
+              <li><a href="#">Category 4</a></li>
+            </ul>
+          </div><!-- End Sidebar Widget: Categories -->
+
+          <!-- Sidebar Widget: Recent Posts -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Recent Posts</h3>
+            <ul class="recent-posts">
+              <li><a href="#">Recent Post 1</a></li>
+              <li><a href="#">Recent Post 2</a></li>
+              <li><a href="#">Recent Post 3</a></li>
+              <li><a href="#">Recent Post 4</a></li>
+            </ul>
+          </div><!-- End Sidebar Widget: Recent Posts -->
+        </div><!-- End sidebar -->
+
+      </div><!-- End col-lg-4 -->
+
+    </div><!-- End row -->
+
+  </div><!-- End container -->
+</section><!-- End blog section -->
+{% endblock main_content %}
