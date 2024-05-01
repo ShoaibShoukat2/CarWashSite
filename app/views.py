@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password ,check_password # Import make_password
-from .models import Signup,Vehicle,SubscrationDuration,Packages,DescriptionPrice
+from .models import *
+from django.core.files.storage import FileSystemStorage
 
 
 # Create your views here.
@@ -9,42 +10,74 @@ from .models import Signup,Vehicle,SubscrationDuration,Packages,DescriptionPrice
 
 
 def index(request):
-    return render(request,'index.html')
+
+    vehicle_data = Vehicle.objects.all()
+
+
+    context = {
+        'CarData':vehicle_data
+    }
+
+    return render(request,'index.html',context)
 
 
 
 
 def signup(request):
-    context = {}  # Initialize an empty context dictionary
+    context = {}
+
     if request.method == 'POST':
-        first_name = request.POST.get('fname')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
         email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        vehicle_brand = request.POST.get('vehicle_brand')
+        vehicle_model = request.POST.get('vehicle_model')
+        vehicle_type = request.POST.get('vehicle_type')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
-        
+
+        # Check if the email already exists
         if Signup.objects.filter(email=email).exists():
             context['error_message'] = 'User with this email already exists. Please use a different email.'
             context['redirect_url'] = 'signup'
-
         else:
+            # Check if passwords match
+            if password != confirm_password:
+                context['error_message'] = 'Passwords do not match.'
+                context['redirect_url'] = 'signup'
+            else:
+                # Hash the password
+                hashed_password = make_password(password)
+                
+                # Handle image upload
+                image_file = request.FILES.get('image')
+                if image_file:
+                    fs = FileSystemStorage()
+                    filename = fs.save(image_file.name, image_file)
+                    image_url = fs.url(filename)
+                else:
+                    # Set a default image URL or handle accordingly
+                    image_url = None
 
-            hashed_password = make_password(password)
+                # Create a new Signup object and save it to the database
+                new_signup = Signup.objects.create(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    phone_number=phone_number,
+                    vehicle_brand=vehicle_brand,
+                    vehicle_model=vehicle_model,
+                    vehicle_type=vehicle_type,
+                    password=hashed_password,
+                    image=image_url  # Save the image URL to the database
+                )
+                context['success_message'] = 'Submitted successfully'
+                context['redirect_url'] = 'login'
+
+    return render(request, 'signup.html', context)
 
 
-            # Create a new Signup object and save it to the database
-            new_signup = Signup.objects.create(
-                name=first_name,
-                email=email,
-                password=hashed_password,
-            )
-
-
-            context['success_message'] = 'submitted successfully'
-            context['redirect_url'] = 'login'
-
-        
-
-    return render(request, 'signup.html',context) 
 
 
 
@@ -59,6 +92,7 @@ def SubscriptionPage(request):
 
  
     return render(request,'sub_category.html',context)
+
 
 
 
@@ -103,9 +137,6 @@ def Details(request, id):
 
 
 
-
-
-
 def login(request):
     context = {}  # Initialize an empty context dictionary
     if request.method == 'POST':
@@ -117,7 +148,7 @@ def login(request):
             if check_password(password, user.password):
                 request.session['user_email'] = email
                 request.session['user_id'] = user.id
-                request.session['user_name'] = user.name
+                request.session['user_name'] = user.first_name
                 context['success_message'] = 'Login successful'
 
             else:
@@ -129,6 +160,7 @@ def login(request):
             context['redirect_url'] = 'login'
 
     return render(request, 'login.html',context)
+
 
 
 
@@ -148,7 +180,6 @@ def Logout(request):
 
 
 
-
 def Guide(request):
     return render(request,'Guide.html')
 
@@ -159,8 +190,55 @@ def contact(request):
 
 
 
-def Blog(request):
+def blog(request):
 
-    return render(request,'Blogs.html')
+    admin = Admin.objects.all()
+    blog_data = Blog.objects.all()
+    category_data = Category.objects.all()
+    comments_data = Comments.objects.all()
+
+
+    blog_data_with_comments = {} 
+
+    for blog in blog_data:
+        comments_for_blog = comments_data.filter(blog_id=blog.id)
+        blog_data_with_comments[blog] = {
+            'id':blog.id,
+            'title': blog.title,
+            'description': blog.description,
+            'comments': comments_for_blog,
+    
+        }
+        
+    return render(request, 'Blogs.html', {
+        'blog_data_with_comments': blog_data_with_comments,
+        'cat_data':category_data,
+        'Admin':admin
+        
+        })
+
+
+
+
+def add_comment(request, pk):
+    blog = Blog.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        comment_text = request.POST.get('comment')
+
+        new_comment = Comments.objects.create(
+            blog_id=blog,
+            name=name,
+            comments=comment_text
+        )
+
+        new_comment.save()
+
+    return redirect('blog-page')
+
+
+
+
 
 

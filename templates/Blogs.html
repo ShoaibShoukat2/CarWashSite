@@ -7,68 +7,57 @@ Blog
 {% block main_content %}
 <section id="blog" class="blog">
   <div class="container" data-aos="fade-up">
-
     <div class="row">
-
       <div class="col-lg-8">
-
-        <!-- Blog Post 1 -->
-        <article class="entry">
-          <div class="entry-content">
-            <h2 class="entry-title">Title of Blog Post 1</h2>
-            <p>This is the content of Blog Post 1. It can contain multiple paragraphs, images, and other media.</p>
+        {% for blog, data in blog_data_with_comments.items %}
+        <!-- Blog Post -->
+        <article class="entry mb-4">
+          <div class="card shadow">
+            <div class="card-body">
+              <h2 class="card-title">{{ blog.title }}</h2>
+              <p class="card-text">{{ blog.description }}</p>
+            </div>
+            <!-- Comments Section -->
+            <div class="card-footer">
+              <h5 class="card-title">Comments</h5>
+              <ul class="list-unstyled">
+                {% for comment in data.comments %}
+                <li class="media mb-3">
+                  <div class="media-body">
+                    <h5 class="mt-0 mb-1">{{ comment.name }}</h5>
+                    <p>{{ comment.comments }}</p>
+                  </div>
+                </li>
+                {% empty %}
+                <li class="media mb-3">
+                  <div class="media-body">
+                    <p>No comments yet.</p>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+              <!-- Add Comment Form -->
+              <form method="post" action="/add-comment/{{blog.id}}/" class="mt-4">
+                {% csrf_token %}
+                <input type="hidden" name="blog_id" value="{{ blog.id }}">
+                <div class="form-group">
+                  <label for="name">Your Name</label>
+                  <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                  <label for="comment">Your Comment</label>
+                  <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div><!-- End Comments -->
           </div>
-          <!-- Comments Section -->
-          <div class="comments">
-            <h3 class="comment-title">Comments</h3>
-            <ul class="list-unstyled">
-              <!-- Comment 1 for Blog Post 1 -->
-              <li class="media comment">
-                <img class="mr-3 rounded-circle" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" alt="User Avatar" style="width: 50px;">
-                <div class="media-body">
-                  <h5 class="mt-0 mb-1">John Doe</h5>
-                  <p class="mb-0">This is a sample comment on Blog Post 1.</p>
-                </div>
-              </li>
-              <!-- Comment 2 for Blog Post 1 -->
-              <li class="media comment">
-                <img class="mr-3 rounded-circle" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" alt="User Avatar" style="width: 50px;">
-                <div class="media-body">
-                  <h5 class="mt-0 mb-1">Jane Smith</h5>
-                  <p class="mb-0">Another sample comment on Blog Post 1.</p>
-                </div>
-              </li>
-            </ul>
-          </div><!-- End comments -->
-        </article><!-- End blog entry -->
-
-        <!-- Blog Post 2 -->
-        <article class="entry">
-          <div class="entry-content">
-            <h2 class="entry-title">Title of Blog Post 2</h2>
-            <p>This is the content of Blog Post 2. It can also contain multiple paragraphs, images, and other media.</p>
-          </div>
-          <!-- Comments Section -->
-          <div class="comments">
-            <h3 class="comment-title">Comments</h3>
-            <ul class="list-unstyled">
-              <!-- Comment 1 for Blog Post 2 -->
-              <li class="media comment">
-                <img class="mr-3 rounded-circle" src="https://mdbootstrap.com/img/Photos/Avatars/avatar-3.jpg" alt="User Avatar" style="width: 50px;">
-                <div class="media-body">
-                  <h5 class="mt-0 mb-1">Alice Johnson</h5>
-                  <p class="mb-0">Sample comment on Blog Post 2.</p>
-                </div>
-              </li>
-            </ul>
-          </div><!-- End comments -->
-        </article><!-- End blog entry -->
-
-      </div><!-- End col-lg-8 -->
-
+        </article><!-- End Blog Post -->
+        {% endfor %}
+      </div>
+      
       <!-- Sidebar -->
       <div class="col-lg-4">
-
         <div class="sidebar">
           <!-- Sidebar Widget: About Author -->
           <div class="sidebar-widget">
@@ -83,29 +72,14 @@ Blog
           <div class="sidebar-widget">
             <h3 class="widget-title">Categories</h3>
             <ul class="categories">
-              <li><a href="#">Category 1</a></li>
-              <li><a href="#">Category 2</a></li>
-              <li><a href="#">Category 3</a></li>
-              <li><a href="#">Category 4</a></li>
+              {% for data in cat_data %}
+              <li><a href="#">{{data.name}}</a></li>
+              {% endfor %}
             </ul>
           </div><!-- End Sidebar Widget: Categories -->
-
-          <!-- Sidebar Widget: Recent Posts -->
-          <div class="sidebar-widget">
-            <h3 class="widget-title">Recent Posts</h3>
-            <ul class="recent-posts">
-              <li><a href="#">Recent Post 1</a></li>
-              <li><a href="#">Recent Post 2</a></li>
-              <li><a href="#">Recent Post 3</a></li>
-              <li><a href="#">Recent Post 4</a></li>
-            </ul>
-          </div><!-- End Sidebar Widget: Recent Posts -->
         </div><!-- End sidebar -->
-
       </div><!-- End col-lg-4 -->
-
     </div><!-- End row -->
-
   </div><!-- End container -->
 </section><!-- End blog section -->
 {% endblock main_content %}

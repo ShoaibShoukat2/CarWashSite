@@ -1,13 +1,49 @@
 from django.contrib import admin
 from .models import *
 
-# Register your models here.
+
+
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ('title','description','admin_name', 'category_name')
+
+    def admin_name(self, obj):
+        return obj.admin.user.username if obj.admin.user else None
+    
+    admin_name.short_description = 'Admin'
+
+
+
+    def category_name(self, obj):
+        return obj.category.name if obj.category else None
+    
+    category_name.short_description = 'Category'
+
+
+
+admin.site.register(Comments)
+
+
+
+class AdminAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+
+admin.site.register(Admin, AdminAdmin)
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'admin')
+
+admin.site.register(Category, CategoryAdmin)
+
+
+
+
 @admin.register(Signup)
 class SignupAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'created_at')
-    search_fields = ('name', 'email',)
-    list_filter = ('created_at',)
-
+    list_display = ('id', 'first_name', 'last_name', 'email', 'phone_number', 'vehicle_brand', 'vehicle_model', 'vehicle_type', 'created_at')
+    list_display_links = ('id', 'email')  # Make 'id' and 'email' clickable
+    search_fields = ('first_name', 'last_name', 'email', 'phone_number')  # Add search functionality
 
 
 

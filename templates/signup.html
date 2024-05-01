@@ -796,46 +796,56 @@ input.checkbox:checked:after {
 </head>
 <body>
 
+
+
 	<!-- main -->
 	<div class="main-w3layouts wrapper">
-        <a href="/" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
-		<h1>SignUp</h1>
-		<div class="main-agileinfo">
-			<div class="agileits-top">
-				<form action="/signup/" method="post">
-          {% csrf_token %}
-					<input class="text" type="text" name="fname" placeholder="Username" required="">
-					<input class="text email" type="email" name="email" placeholder="Email" required="">
-					<input class="text" type="password" id="exampleInputPassword" name="password" placeholder="Password" required="">
-					<input class="text w3lpass" type="password" id="exampleInputConfirmPassword" name="confirm_password" placeholder="Confirm Password" required="">
-          <div id="passwordError" class="text-danger"></div>
-					<div class="wthree-text">
-						
-						<div class="clear"> </div>
-					</div>
-					<input type="submit" value="SIGNUP">
-				</form>
-				<p>Don't have an Account? <a href="/login"> Login Now!</a></p>
-			</div>
-		</div>
-		<!-- copyright -->
-		<div class="colorlibcopy-agile">
-			<p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/" target="_blank">Shoaib</a></p>
-		</div>
-		<!-- //copyright -->
-		<ul class="colorlib-bubbles">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
-	</div>
+    <a href="/" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
+    <h1>SignUp</h1>
+    <div class="main-agileinfo">
+        <div class="agileits-top">
+            <form action="/signup/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <input class="text" type="text" name="first_name" placeholder="First Name" required="">
+                <input class="text" style="margin-top: 2%;" type="text" name="last_name" placeholder="Last Name" required="">
+                <input class="text" style="margin-top: 2%;" type="file" name="image" accept="image/*" required="">
+                <input class="text " style="margin-top: 2%;" type="email" name="email" placeholder="Email" required="">
+                <input class="text" style="margin-top: 2%;" type="text" name="phone_number" placeholder="Phone Number" required="">
+                <input class="text" style="margin-top: 2%;" type="text" name="vehicle_brand" placeholder="Vehicle Brand" required="">
+                <input class="text" style="margin-top: 2%;" type="text" name="vehicle_model" placeholder="Vehicle Model" required="">
+                <input class="text" style="margin-top: 2%;" type="text" name="vehicle_type" placeholder="Vehicle Type" required="">
+                <input class="text" style="margin-top: 2%;" type="password" id="exampleInputPassword" name="password" placeholder="Password" required="">
+                <input class="text" style="margin-top: 2%;" type="password" id="exampleInputConfirmPassword" name="confirm_password" placeholder="Confirm Password" required="">
+                <div id="passwordError" class="text-danger"></div>
+                <div class="wthree-text">
+                  
+                    <div class="clear"> </div>
+                </div>
+                <input type="submit" value="SIGNUP">
+            </form>
+            <p>Already have an account? <a href="/login">Login Now!</a></p>
+        </div>
+    </div>
+    <!-- copyright -->
+    <div class="colorlibcopy-agile">
+        <p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/" target="_blank">Shoaib</a></p>
+    </div>
+    <!-- //copyright -->
+    <ul class="colorlib-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
 	<!-- //main -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -25,12 +25,15 @@
   <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-rOd2fYw4FpdztzBwz5FytFf5caLWDM0yvHDLiyl8+JvPTURwXc2HN7a4aP1QvE0E" crossorigin="anonymous">
+
 
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
 
   <!-- MDB links -->
-
 
 
 <style>
@@ -46,10 +49,24 @@
 .star {
     color: #f7b733; /* Change the color of the stars */
 }
+.step {
+            position: relative;
+            padding-left: 20px; /* Adjust this value to control the space between the number and text */
+            text-align: justify;
+            font-size: 20px; /* Adjust this value to increase/decrease text size */
+        }
+
+        .step span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #8360c3; /* Color for icon */
+        }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -98,75 +115,83 @@
   </header><!-- End Header -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   <!-- ======= Hero Section ======= -->
   
-  <section id="hero">
+<section id="hero" style="height: 100vh;">
     <div class="container-fluid">
         <div class="row">
             <!-- Left Section for Text -->
-            <div class="col-md-6">
-                <div class="carousel-container">
+            <div class="col-md-6" style="margin-top: 100px;">
                     <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown">Welcome to <span>AWA</span></h2>
-                        <p class="animate__animated animate__fadeInUp">Wash your vehicle as many times as you want with your subscription. Schedule your wash with one click, quick and easy, anytime, anywhere.
-                          .</p>
+                      <p class="animate__animated animate__fadeInUp step"><span>1</span>Selecciona el día y la hora de tu preferencia.</p>
+                      <p class="animate__animated animate__fadeInUp step"><span>2</span>Escoge el servicio que deseas adquirir.</p>
+                      <p class="animate__animated animate__fadeInUp step"><span>3</span>Rellena el formulario, elige tu método de pago y ¡listo!.</p>
+                  </body>
                     </div>
-                </div>
             </div>
+
+
 
             <!-- Right Section for Image -->
             <div class="col-md-6">
-                <!-- Your MDB car image goes here -->
-                <img src="../static/img/carimage2.bin" alt="Car Image" class="img-fluid">
+                <div class="row justify-content-center align-items-center" style="height: 100%;">
+                    <div class="col-md-12">
+                        <!-- Your MDB car image goes here -->
+                        <img src="../static/img/carimage2.bin" alt="Car Image" class="img-fluid">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 
+
   <!-- End Hero -->
-
-  
-
-
 
 
   <main id="main">
 
-    <section id="pick-your-car" class="pick-your-car section-bg">
-      <div class="container">
-    
-        <div class="row no-gutters d-flex justify-content-center">
-          <div class="col-lg-4 col-md-6">
-            <div class="icon-box" style="text-align: center;">
-              <div class="icon"><i class="bi bi-car"></i></div>
-              <h4 class="title" style="margin-top: 10px;">Pick Your Car</h4>
-              <p class="description">Explore our range of vehicles and find the perfect match for your needs.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="icon-box" style="text-align: center;">
-              <div class="icon"><i class="bi bi-car"></i></div>
-              <h4 class="title" style="margin-top: 10px;">Choose Your Subscription Plan</h4>
-              <p class="description">Select from our flexible subscription plans tailored to your preferences.</p>
-            </div>
+    <h2 class="text-center mt-3 mb-3">Pick Your Car</h2>
+    <style>
+      #pick-your-car {
+        background: linear-gradient(135deg, #8360c3, #2ebf91);
+      }
+    </style>
+
+<section id="pick-your-car" class="pick-your-car section-bg">
+  <div class="container">
+    <div id="carouselExampleControls" class="carousel slide">
+      <div class="carousel-inner">
+        {% for car in CarData %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <a href="/subscriptions/car-details/{{car.id}}">
+            <img src="../media/{{car.file }}" class="d-block mx-auto" width="350" height="300" alt="{{ car.name }}" data-car-id="{{ car.id }}">
+          </a>
+          <div class="carousel-caption d-none d-md-block">
+            <p class="text-center" style="font-weight: bold;">{{car.name}}</p>
           </div>
         </div>
-        
+        {% endfor %}
       </div>
-    </section><!-- End Pick Your Car Section -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+  
+      
+      <!-- External link for Bootstrap CSS and JS -->
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      
+        
 
     <!-- reviews -->
     <section id="services" class="services">

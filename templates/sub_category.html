@@ -65,7 +65,11 @@
   <a href="/" class="back-to-top"><i class="fas fa-arrow-up" style="color: white;"></i></a>
 
 
-<div class="container">
+
+  {% if CarData %}
+
+
+<div class="container">  
   
   <!-- Carousel wrapper -->
   <div id="carouselBasicExample" class="carousel slide carousel-fade" style="height: 100vh;"  data-mdb-carousel-init>
@@ -87,7 +91,11 @@
       </div>
 
       {% endfor %}
+
+
     </div>
+
+
     
     <!-- Controls -->
   
@@ -102,6 +110,12 @@
   </div>
   <!-- Carousel wrapper -->
 </div>
+
+{% else %}
+<div class="container mt-4">
+  <h1 class="text-center" style="height: 100vh;">Car Data Not Exists</h1>
+</div>
+{% endif %}
 
 
 
