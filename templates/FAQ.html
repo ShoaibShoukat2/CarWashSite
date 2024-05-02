@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}
+FAQ
+{% endblock title %}
+
+{% block main_content %}
+<!-- MDB CSS -->
+
+<div class="accordion w-100 mb-5" id="basicAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button  data-mdb-collapse-init class="accordion-button collapsed" type="button"
+          data-mdb-target="#basicAccordionCollapseOne" aria-expanded="false" aria-controls="collapseOne">
+          Do you use water to wash my car?
+        </button>
+      </h2>
+      <div id="basicAccordionCollapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+        data-mdb-parent="#basicAccordion" >
+        <div class="accordion-body">
+          Yes, we use water for washing your car. Our washing process is designed to be efficient and environmentally friendly.
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwo">
+        <button  data-mdb-collapse-init class="accordion-button collapsed" type="button"
+          data-mdb-target="#basicAccordionCollapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          How long will the wash last?
+        </button>
+      </h2>
+      <div id="basicAccordionCollapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+        data-mdb-parent="#basicAccordion" style="">
+        <div class="accordion-body">
+          The duration of the wash depends on the type of service you choose and the condition of your vehicle. Typically, our wash services last between 20 to 30 minutes.
+        </div>
+      </div>
+    </div>
+    <!-- Add more questions and answers below -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button  data-mdb-collapse-init class="accordion-button collapsed" type="button"
+          data-mdb-target="#basicAccordionCollapseThree" aria-expanded="false" aria-controls="collapseThree">
+          How can I get my membership?
+        </button>
+      </h2>
+      <div id="basicAccordionCollapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+        data-mdb-parent="#basicAccordion" style="">
+        <div class="accordion-body">
+          You can get a membership by visiting our office or contacting us through our website or phone. We offer various membership plans tailored to your needs.
+        </div>
+      </div>
+    </div>
+    <!-- Add more questions and answers as needed -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFour">
+        <button  data-mdb-collapse-init class="accordion-button collapsed" type="button"
+          data-mdb-target="#basicAccordionCollapseFour" aria-expanded="false" aria-controls="collapseFour">
+          How can I pay for the service?
+        </button>
+      </h2>
+      <div id="basicAccordionCollapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+        data-mdb-parent="#basicAccordion" style="">
+        <div class="accordion-body">
+          We accept various forms of payment including cash, credit/debit cards, and online payment methods. You can choose the most convenient option for you.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFive">
+        <button  data-mdb-collapse-init class="accordion-button collapsed" type="button"
+          data-mdb-target="#basicAccordionCollapseFive" aria-expanded="false" aria-controls="collapseFive">
+          What type of products do you use for washing?
+        </button>
+      </h2>
+      <div id="basicAccordionCollapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+        data-mdb-parent="#basicAccordion" style="">
+        <div class="accordion-body">
+          We use high-quality, eco-friendly cleaning products that are safe for your vehicle and the environment.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingSix">
+        <button  data-mdb-collapse-init class="accordion-button collapsed" type="button"
+          data-mdb-target="#basicAccordionCollapseSix" aria-expanded="false" aria-controls="collapseSix">
+          How can I schedule an appointment to wash my vehicle?
+        </button>
+      </h2>
+      <div id="basicAccordionCollapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
+        data-mdb-parent="#basicAccordion" style="">
+        <div class="accordion-body">
+          You can schedule an appointment through our website, mobile app, or by contacting our customer service team.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingSeven">
+        <button  data-mdb-collapse-init class="accordion-button collapsed" type="button"
+          data-mdb-target="#basicAccordionCollapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+          Can AWA come to my building?
+        </button>
+      </h2>
+      <div id="basicAccordionCollapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven"
+        data-mdb-parent="#basicAccordion" style="">
+        <div class="accordion-body">
+          Yes, we provide mobile washing services and can come to your location to wash your vehicle.
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock main_content %}

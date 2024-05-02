@@ -12,8 +12,8 @@ urlpatterns = [
     path('guide/',Guide,name="guide-content"),
     path('contact/',contact,name="contact-page"),
     path('blog-news/',blog,name="blog-page"),
-    path('add-comment/<int:pk>/',add_comment,name="addblog-page")
+    path('add-comment/<int:pk>/',add_comment,name="addblog-page"),
+    path('FAQ/',FAQ_Function,name="faq-page")
 ]
-
 
 

@@ -242,3 +242,8 @@ def add_comment(request, pk):
 
 
 
+def FAQ_Function(request):
+
+    return render(request,'FAQ.html')
+
+
