@@ -13,7 +13,10 @@ urlpatterns = [
     path('contact/',contact,name="contact-page"),
     path('blog-news/',blog,name="blog-page"),
     path('add-comment/<int:pk>/',add_comment,name="addblog-page"),
-    path('FAQ/',FAQ_Function,name="faq-page")
+    path('FAQ/',FAQ_Function,name="faq-page"),
+    path('schedule/',Schedule,name="scheduling-page")
 ]
+
+
 
 

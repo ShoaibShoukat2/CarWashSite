@@ -98,6 +98,8 @@
             <ul>
               <li><a href="/blog-news">Blog & News</a></li>
               <li><a href="/FAQ">FAQ</a></li>
+              <li><a href="/schedule">Schedulig</a></li>
+              
             </ul>
           </li>
           <li><a class="getstarted scrollto" href="/guide">Guide</a></li>
@@ -154,43 +156,77 @@
     <h2 class="text-center mt-3 mb-3">Pick Your Car</h2>
     <style>
       #pick-your-car {
-        background: linear-gradient(135deg, #8360c3, #2ebf91);
-      }
-    </style>
-
+            background: linear-gradient(135deg, #8360c3, #2ebf91);
+            padding: 50px 0;
+        }
+        .car-caption {
+            padding-top: 20px;
+        }
+        .btn-details {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box shadow */
+        }
+        .btn-details:hover {
+            background-color: #45a049; /* Dark Green */
+            color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+        }
+  </style>
 <section id="pick-your-car" class="pick-your-car section-bg">
   <div class="container">
-    <div id="carouselExampleControls" class="carousel slide">
-      <div class="carousel-inner">
-        {% for car in CarData %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <a href="/subscriptions/car-details/{{car.id}}">
-            <img src="../media/{{car.file }}" class="d-block mx-auto" width="350" height="300" alt="{{ car.name }}" data-car-id="{{ car.id }}">
-          </a>
-          <div class="carousel-caption d-none d-md-block">
-            <p class="text-center" style="font-weight: bold;">{{car.name}}</p>
+      <div id="carouselExampleControls" class="carousel slide">
+          <div class="carousel-inner">
+              {% for car in CarData %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <a href="#" class="car-link">
+                      <img src="../media/{{car.file }}" class="d-block mx-auto" width="350" height="300" alt="{{ car.name }}" data-car-id="{{ car.id }}">
+                  </a>
+                  <div class="carousel-caption d-none d-md-block car-caption">
+                      <h4 class="text-center">{{car.name}}</h4>
+                      <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nisi sit amet nunc cursus rhoncus at nec ligula.</p>
+                      <div class="text-center">
+                          <button class="btn btn-details" data-car-id="{{ car.id }}">Select</button>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
           </div>
-        </div>
-        {% endfor %}
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+          </button>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
   </div>
 </section>
-  
-      
-      <!-- External link for Bootstrap CSS and JS -->
-      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-      
-        
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+      $(".btn-details").click(function() {
+          var carId = $(this).data("car-id");
+          var carDetailsUrl = "/subscriptions/car-details/" + carId;
+          window.location.href = carDetailsUrl;
+      });
+  });
+</script>
+
 
     <!-- reviews -->
     <section id="services" class="services">
@@ -272,8 +308,10 @@
           </div>
       </div>
   </section>
+
+ 
   
-  
+
     <!-- reviews -->
 
 

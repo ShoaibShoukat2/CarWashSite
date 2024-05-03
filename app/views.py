@@ -247,3 +247,9 @@ def FAQ_Function(request):
     return render(request,'FAQ.html')
 
 
+
+
+def Schedule(request):
+    return render(request,'Scheduling.html')
+
+
