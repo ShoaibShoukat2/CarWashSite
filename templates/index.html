@@ -290,6 +290,12 @@
               beforeSend: function(xhr) {
             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
         },
+
+        dataType: 'json', // Ensure that jQuery parses the response as JSON
+    contentType: 'application/json', // Specify the Content-Type header
+    accepts: {
+        json: 'application/json' // Specify the Accept header
+    },
               success: function(response) {
                   // Assuming you have a function to update the car details on the page
                   updateCarDetailsOnPage(response);

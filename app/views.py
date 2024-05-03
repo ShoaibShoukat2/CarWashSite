@@ -144,6 +144,8 @@ def Details(request, id):
 
 
 
+
+
 def login(request):
     context = {}  # Initialize an empty context dictionary
     if request.method == 'POST':
@@ -170,8 +172,6 @@ def login(request):
 
 
 
-
-
 def Logout(request):
     
     del request.session['user_email']
@@ -180,9 +180,6 @@ def Logout(request):
 
 
     return redirect('index-page')
-
-
-
 
 
 
@@ -223,8 +220,6 @@ def blog(request):
         'Admin':admin
         
         })
-
-
 
 
 def add_comment(request, pk):
