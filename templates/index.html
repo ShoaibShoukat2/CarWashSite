@@ -287,6 +287,9 @@
           $.ajax({
               url: '/subscriptions/car-details/' + carId,
               type: 'GET',
+              beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        },
               success: function(response) {
                   // Assuming you have a function to update the car details on the page
                   updateCarDetailsOnPage(response);
@@ -297,7 +300,20 @@
           });
       }
 
-
+      function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
       // Function to get the carId of the currently active carousel item
       function getActiveCarId() {
           return $(".carousel-item.active").find("img").data("car-id");
