@@ -116,6 +116,7 @@
   </header><!-- End Header -->
 
 
+
   <!-- ======= Hero Section ======= -->
   
 <section id="hero" style="height: 100vh;">
@@ -148,59 +149,39 @@
 
 
 
+
   <!-- End Hero -->
 
 
   <main id="main">
 
-    <h2 class="text-center mt-3 mb-3">Pick Your Car</h2>
     <style>
       #pick-your-car {
-            background: linear-gradient(135deg, #8360c3, #2ebf91);
-            padding: 50px 0;
-        }
-        .car-caption {
-            padding-top: 20px;
-        }
-        .btn-details {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 10px 24px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 10px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box shadow */
-        }
-        .btn-details:hover {
-            background-color: #45a049; /* Dark Green */
-            color: white;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
-        }
+          background: linear-gradient(135deg, #8360c3, #2ebf91);
+      }
   </style>
+
 <section id="pick-your-car" class="pick-your-car section-bg">
   <div class="container">
       <div id="carouselExampleControls" class="carousel slide">
+        <div class="container">
+          
+    <h2 class="text-center mt-3 mb-3">Pick Your Car</h2>
+        </div>
+
           <div class="carousel-inner">
               {% for car in CarData %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                   <a href="#" class="car-link">
                       <img src="../media/{{car.file }}" class="d-block mx-auto" width="350" height="300" alt="{{ car.name }}" data-car-id="{{ car.id }}">
                   </a>
-                  <div class="carousel-caption d-none d-md-block car-caption">
-                      <h4 class="text-center">{{car.name}}</h4>
-                      <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nisi sit amet nunc cursus rhoncus at nec ligula.</p>
-                      <div class="text-center">
-                          <button class="btn btn-details" data-car-id="{{ car.id }}">Select</button>
-                      </div>
+                  <div class="container" style="margin-bottom: 30px;">
+                    <h3 class="text-center" style="font-weight: bold;">{{car.name}}</h3>
+
                   </div>
               </div>
               {% endfor %}
+              
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -210,23 +191,143 @@
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
           </button>
-      </div>
+      </div>      
   </div>
+
+    <!-- Make sure to maintain the existing HTML structure -->
+    <div class="container">
+        <!-- Carousel wrapper -->
+        <div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-carousel-init>
+            <!-- Indicators -->
+            <!-- <h2 class="text-center mt-4">Pick Your Car</h2> -->
+
+            <!-- Inner -->
+            <div class="carousel-inner">
+                <!-- Single item -->
+                
+            </div>
+        </div>
+        <!-- Carousel wrapper -->
+
+        <div class="container mb-4">
+          <div class="row subscription-plans">
+              <!-- Subscription plans will be populated here dynamically -->
+          </div>
+      </div>
+    </div>
 </section>
 
+  
+</section>
+
+
+
+
+
+     <!-- External link for Bootstrap CSS and JS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
   $(document).ready(function() {
-      $(".btn-details").click(function() {
-          var carId = $(this).data("car-id");
-          var carDetailsUrl = "/subscriptions/car-details/" + carId;
-          window.location.href = carDetailsUrl;
+
+    function updateCarDetailsOnPage(carDetails) {
+    // Assuming carDetails is the response object you receive from the AJAX call
+    var subData = carDetails.sub_data;
+
+    // Clear existing subscription plans
+    $(".subscription-plans").empty();
+
+    // Loop through each subscription type
+    $.each(subData, function(subscriptionType, plans) {
+        // Create a container for the subscription plans of this type
+        var subscriptionContainer = $('<div class="col-md-4 mt-2"></div>');
+
+        // Add a header for the subscription type
+        subscriptionContainer.append(`<h4>${subscriptionType}</h4>`);
+
+        // Loop through each plan under the current subscription type
+        $.each(plans, function(index, plan) {
+            // Check if there are any descriptions available
+            var description = plan.descriptions.length > 0 ? plan.descriptions[0].description : "No description available";
+            var price = plan.descriptions.length > 0 ? "$" + plan.descriptions[0].price : "Price not available";
+
+            // Create HTML for subscription plan
+            var planHtml = `
+
+                <div class="card border-white bg-transparent">
+                    <div class="card-header border-transparent">
+                        ${plan.name}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${subscriptionType}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Price: ${price}</li>
+                            <li class="list-group-item">Description: ${description}</li>
+                        </ul>
+                        <div class="card-footer border-transparent">
+                            <a href="#" class="btn btn-dark w-100">Subscribe</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Append the plan HTML to the subscription container
+            subscriptionContainer.append(planHtml);
+        });
+
+        // Append the subscription container to the main container
+        $(".subscription-plans").append(subscriptionContainer);
+    });
+}
+
+      // Function to update car details
+      function updateCarDetails(carId) {
+          $.ajax({
+              url: '/subscriptions/car-details/' + carId,
+              type: 'GET',
+              success: function(response) {
+                  // Assuming you have a function to update the car details on the page
+                  updateCarDetailsOnPage(response);
+              },
+              error: function(xhr, status, error) {
+                  console.error("Error fetching car details:", error);
+              }
+          });
+      }
+
+
+      // Function to get the carId of the currently active carousel item
+      function getActiveCarId() {
+          return $(".carousel-item.active").find("img").data("car-id");
+      }
+
+      // Get the carId of the initially active carousel item and fetch its details
+      var initialCarId = getActiveCarId();
+      updateCarDetails(initialCarId);
+
+      // Click event for carousel items
+      $(".carousel-item").click(function() {
+          var carId = $(this).find("img").data("car-id");
+          updateCarDetails(carId);
+      });
+
+      // Click event for next button
+      $(".carousel-control-next").click(function() {
+          var nextItem = $(".carousel-item.active").next();
+          var carId = nextItem.length ? nextItem.find("img").data("car-id") : $(".carousel-item:first").find("img").data("car-id");
+          updateCarDetails(carId);
+      });
+
+      // Click event for previous button
+      $(".carousel-control-prev").click(function() {
+          var prevItem = $(".carousel-item.active").prev();
+          var carId = prevItem.length ? prevItem.find("img").data("car-id") : $(".carousel-item:last").find("img").data("car-id");
+          updateCarDetails(carId);
       });
   });
 </script>
-
 
     <!-- reviews -->
     <section id="services" class="services">
@@ -252,7 +353,7 @@
                           <span class="star">&#9733;</span>
                           <span class="star">&#9734;</span> <!-- Change this to &#9733; for full star -->
                       </div>
-                      <p>"AWA Car Wash has been a game-changer for me. The convenience of scheduling washes according to my own time and the quality of service they provide is unmatched."</p>
+                      <p>AWA Car Wash has been a game-changer for me. The convenience of scheduling washes according to my own time and the quality of service they provide is unmatched.</p>
                   </div>
               </div>
               <!-- End of User Review 1 -->
@@ -273,7 +374,7 @@
                           <span class="star">&#9734;</span> <!-- Change this to &#9733; for full star -->
                           <span class="star">&#9734;</span>
                       </div>
-                      <p>"I love how easy it is to manage my subscription through the AWA app. Plus, the surprise kits they send out are always a pleasant surprise!"</p>
+                      <p>I love how easy it is to manage my subscription through the AWA app. Plus, the surprise kits they send out are always a pleasant surprise!</p>
                   </div>
               </div>
               <!-- End of User Review 2 -->
@@ -294,7 +395,7 @@
                           <span class="star">&#9734;</span>
                           <span class="star">&#9734;</span>
                       </div>
-                      <p>"I've been a subscriber for over a year now, and I couldn't be happier with the service. The monthly wax treatments keep my car looking brand new!"</p>
+                      <p>I've been a subscriber for over a year now, and I couldn't be happier with the service. The monthly wax treatments keep my car looking brand new!</p>
                   </div>
               </div>
               <!-- End of User Review 3 -->
@@ -309,10 +410,10 @@
       </div>
   </section>
 
- 
-  
 
     <!-- reviews -->
+
+    <!-- this cde cn mak thsyem easir to m -->
 
 
     <!-- Subscritio Benifits -->
@@ -441,7 +542,8 @@
     </div>
 
   </div>
-</section><!-- End Services Section -->
+</section>
+<!-- End Services Section -->
 
     
     <!-- ======= About Us Section ======= -->
@@ -477,7 +579,8 @@
         </div>
 
       </div>
-    </section><!-- End About Us Section -->
+    </section>
+    <!-- End About Us Section -->
 
 
 
@@ -526,7 +629,8 @@
         </div>
 
       </div>
-    </section><!-- End Why Us Section -->
+    </section>
+    <!-- End Why Us Section -->
 
     <!-- ======= Our Clients Section ======= -->
     <section id="clients" class="clients">
@@ -552,7 +656,8 @@
         </div>
 
       </div>
-    </section><!-- End Our Clients Section -->
+    </section>
+    <!-- End Our Clients Section -->
 
    
 
@@ -571,7 +676,8 @@
         </div>
 
       </div>
-    </section><!-- End Cta Section -->
+    </section>
+    <!-- End Cta Section -->
 
 
 
@@ -619,9 +725,11 @@
         </div>
 
       </div>
-    </section><!-- End Contact Section -->
+    </section>
+    <!-- End Contact Section -->
 
-  </main><!-- End #main -->
+  </main>
+  <!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -643,7 +751,8 @@
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer>
+  <!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -668,6 +777,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"
 </body>
 
 </html>
+
 
 
 

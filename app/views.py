@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password ,check_password # Import make_password
 from .models import *
 from django.core.files.storage import FileSystemStorage
-
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -19,6 +19,7 @@ def index(request):
     }
 
     return render(request,'index.html',context)
+
 
 
 
@@ -97,42 +98,48 @@ def SubscriptionPage(request):
 
 
 def Details(request, id):
-    vehicle = Vehicle.objects.get(id=id)
-    sub_data = SubscrationDuration.objects.filter(vehicle_id=vehicle)
-    subscription_dict = {}
+    try:
+        vehicle = Vehicle.objects.get(id=id)
+        sub_data = SubscrationDuration.objects.filter(vehicle_id=vehicle)
+        subscription_dict = {}
 
-
-    for data in sub_data:
-        subscription_packages = []
-        package_info = Packages.objects.filter(subscription_id=data)
-        
-        for package in package_info:
-            descriptions = []
-            description_prices = DescriptionPrice.objects.filter(vehicle_id=vehicle, subscription_id=data, package_id=package.id)
+        for data in sub_data:
+            subscription_packages = []
+            package_info = Packages.objects.filter(subscription_id=data)
             
-            for dp in description_prices:
-                descriptions.append({
-                    'description': dp.description,
-                    'price': dp.price
+            for package in package_info:
+                descriptions = []
+                description_prices = DescriptionPrice.objects.filter(vehicle_id=vehicle, subscription_id=data, package_id=package.id)
+                
+                for dp in description_prices:
+                    descriptions.append({
+                        'description': dp.description,
+                        'price': dp.price
+                    })
+
+                subscription_packages.append({
+                    'name': package.name,
+                    'id': package.id,
+                    'descriptions': descriptions
                 })
-
-
             
-            subscription_packages.append({
-                'name': package.name,
-                'id': package.id,
-                'descriptions': descriptions
-            })
-        
-        subscription_dict[data.subscription_name] = subscription_packages
+            subscription_dict[data.subscription_name] = subscription_packages
+
+        context = {
+            'vehicle': {
+                'id': vehicle.id,
+                'name': vehicle.name,  # Add other fields as needed
+                # Add other fields as needed
+            },
+            'sub_data': subscription_dict,
+        }
+
+        return JsonResponse(context)
+    except Vehicle.DoesNotExist:
+        return JsonResponse({'error': 'Vehicle not found'}, status=404)
 
 
-    context = {
-        'vehicle': vehicle,
-        'sub_data': subscription_dict,
-    }
 
-    return render(request, 'details.html', context)
 
 
 
@@ -236,7 +243,6 @@ def add_comment(request, pk):
         new_comment.save()
 
     return redirect('blog-page')
-
 
 
 
