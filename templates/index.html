@@ -285,7 +285,7 @@
       // Function to update car details
       function updateCarDetails(carId) {
           $.ajax({
-              url: '/subscriptions/car-details/' + carId,
+              url: 'carwashsite.pythonanywhere.com/subscriptions/car-details/' + carId,
               type: 'GET',
               success: function(response) {
                   // Assuming you have a function to update the car details on the page
