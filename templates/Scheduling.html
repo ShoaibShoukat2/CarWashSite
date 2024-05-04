@@ -1,60 +1,72 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}
+Get Appointment
+{% endblock title %}
+
 {% block main_content %}
-<div id="map"></div>
-<input id="pac-input" class="controls" type="text" placeholder="Enter your location">
-
-<script>
-  function initMap() {
-    const map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: -34.397, lng: 150.644 },
-      zoom: 8,
-    });
-
-    const input = document.getElementById("pac-input");
-    const searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-    map.addListener("bounds_changed", () => {
-      searchBox.setBounds(map.getBounds());
-    });
-
-
-    let markers = [];
-    searchBox.addListener("places_changed", () => {
-      const places = searchBox.getPlaces();
-
-      if (places.length == 0) {
-        return;
-      }
-
-      markers.forEach((marker) => {
-        marker.setMap(null);
-      });
-      markers = [];
-
-      const bounds = new google.maps.LatLngBounds();
-      places.forEach((place) => {
-        if (!place.geometry || !place.geometry.location) {
-          console.log("Returned place contains no geometry");
-          return;
-        }
-        const marker = new google.maps.Marker({
-          map,
-          title: place.name,
-          position: place.geometry.location,
-        });
-        markers.push(marker);
-
-        if (place.geometry.viewport) {
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
-      });
-      map.fitBounds(bounds);
-    });
+<style>
+  /* Custom styles for this page */
+  .card-header.bg-custom {
+    background-color: #8360c3;
+    color: #fff;
   }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer></script>
+
+  .btn-custom {
+    background-color: #2ebf91;
+    border-color: #2ebf91;
+  }
+
+  .btn-custom:hover {
+    background-color: #229e74;
+    border-color: #229e74;
+  }
+
+  .alert-custom {
+    background-color: #f0f8f7;
+    border-color: #2ebf91;
+    color: #2ebf91;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-custom text-center">
+          <h3 class="mb-0">Schedule an Appointment</h3>
+        </div>
+        <div class="card-body">
+          <form id="appointmentForm" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="location">Location:</label>
+              <input type="text" class="form-control" id="location" name="location" placeholder="Enter location" required>
+            </div>
+            <div class="form-group">
+              <label for="date">Date:</label>
+              <input type="date" class="form-control" id="date" name="date" required>
+              <small class="form-text text-muted">Please select a date within working hours (08:30 am - 05:30 pm).</small>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-custom">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="alert alert-custom" role="alert">
+        <strong>Note:</strong> Appointments can only be scheduled within working hours (08:30 am - 05:30 pm).
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock main_content %}
+
+
