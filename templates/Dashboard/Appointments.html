@@ -1,0 +1,31 @@
+{% extends 'Dashboard/base.html' %}
+{% load static %}
+{% block main_content %}
+
+<!-- Include necessary MDB CSS/JS files -->
+
+<div class="container mt-5">
+  <h2>Appointment Schedule</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>Email</th>
+        <th>Location</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for appointment in appointments %}
+      <tr>
+        <td>{{ appointment.user_id.first_name }}</td>
+        <td>{{ appointment.user_id.email }}</td>
+        <td>{{ appointment.location }}</td>
+        <td>{{ appointment.date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock main_content %}

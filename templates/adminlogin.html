@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}
+Admin Login
+{% endblock title %}
+{% load static %}
+
+{% block main_content %}
+<section class="vh-100" >
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">Admin Login</h3>
+                        <form method="post" action="/admin-login/">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="username" class="form-label text-dark">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label text-dark">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" style="background-color: #2ebf91;">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+{% if error_message %}
+<script>
+  Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: "{{ error_message }}",
+  showClass: {
+    popup: 'animate__animated animate__zoomIn'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__zoomOut'
+  },
+  iconHtml: '<i class="fas fa-times-circle animate__animated animate__bounce"></i>',
+  showConfirmButton: true,
+  confirmButtonText: 'OK',
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.href = "/admin-login";
+  }
+});
+</script>
+
+
+{% endif %}
+
+{% endblock main_content %}

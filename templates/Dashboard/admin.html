@@ -1,0 +1,36 @@
+{% extends 'Dashboard/base.html' %}
+{% load static %}
+
+
+{% block main_content %}
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">User ID</th>
+          <th scope="col">User Name</th>
+          <th scope="col">User Email</th>
+          <th scope="col">Subscription</th>
+          <th scope="col">Package</th>
+          <th scope="col">Vehicle</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for profile in user_profiles %}
+        <tr>
+          <th scope="row">{{ profile.user_id }}</th>
+          <td>{{ profile.user_name }}</td>
+          <td>{{ profile.user_email }}</td>
+          <td>{{ profile.subscription }}</td>
+          <td>{{ profile.package }}</td>
+          <td>{{ profile.vehicle }}</td>
+          <td>{{ profile.price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock main_content %}
+
+

@@ -100,3 +100,20 @@ class DescriptionPriceAdmin(admin.ModelAdmin):
         return obj.package_id.name
     get_package_name.short_description = 'Package Name'
 
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user_name', 'user_email', 'subscription', 'package', 'vehicle', 'price')
+    # Add more fields as needed
+
+admin.site.register(UserProfile, UserProfileAdmin)
+
+
+class AppointmentScheduleAdmin(admin.ModelAdmin):
+    list_display = ('location', 'date', 'user_id')
+    search_fields = ('location', 'user_id__username')  # Assuming 'Signup' has a 'username' field
+
+# Register your models with the admin site
+admin.site.register(AppoitmentSchedule, AppointmentScheduleAdmin)
+
+

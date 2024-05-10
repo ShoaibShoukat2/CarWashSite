@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Profile
+{% endblock title %}
+
+{% block main_content %}
+
+<section class="vh-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-md-9 col-lg-7 col-xl-5">
+          <div class="card mt-3 mb-4" style="border-radius: 15px; background-color: #8360c3;">
+            <div class="card-body p-4 text-white">
+              <div>
+                <h6 class="mb-4">Subscription Details</h6>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <p class="small mb-0"><i class="far fa-clock me-2"></i>Plan: {{ user_profile.subscription }}</p>
+                  <p class="fw-bold mb-0">${{ user_profile.price }}/month</p>
+                </div>
+              </div>
+              <div class="d-flex align-items-center mb-4">
+                <div class="flex-grow-1 ms-3">
+                  <div class="d-flex flex-row align-items-center mb-2">
+                    <p class="mb-0 me-2">Subscriber: {{ user_profile.user_name }}</p>
+                  </div>
+                  <div>
+                    <p class="mb-0">Email: {{ user_profile.user_email }}</p>
+                    <p class="mb-0">Package: {{ user_profile.package }}</p>
+                    <p class="mb-0">Vehicle: {{ user_profile.vehicle }}</p>
+                    <p class="mb-0">Payment Method: stripe</p>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <p class="my-4 pb-1">Manage Subscription</p>
+              <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-rounded btn-block btn-lg" style="background-color: #2ebf91;"><i
+                  class="fas fa-cog me-2"></i>Successfully Subscribed</button>
+             
+            </div>
+          </div>
+          
+          
+          
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+{% endblock main_content %}
+
+

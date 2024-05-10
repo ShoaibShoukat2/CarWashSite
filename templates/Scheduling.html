@@ -38,7 +38,7 @@ Get Appointment
           <h3 class="mb-0">Schedule an Appointment</h3>
         </div>
         <div class="card-body">
-          <form id="appointmentForm" method="post">
+          <form action="" id="appointmentForm" method="post">
             {% csrf_token %}
             <div class="form-group">
               <label for="location">Location:</label>
@@ -58,6 +58,23 @@ Get Appointment
     </div>
   </div>
 </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbJWoNVEym_yqpxVJruTwxszwX2hr608c&libraries=places"></script>
+<script>
+  // Initialize Google Places Autocomplete
+  function initAutocomplete() {
+    var input = document.getElementById('location');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.setFields(['formatted_address']);
+    autocomplete.addListener('place_changed', function() {
+      var place = autocomplete.getPlace();
+      document.getElementById('location').value = place.formatted_address;
+    });
+  }
+  // Load the Places Autocomplete service
+  google.maps.event.addDomListener(window, 'load', initAutocomplete);
+</script>
+
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -67,6 +84,56 @@ Get Appointment
     </div>
   </div>
 </div>
-{% endblock main_content %}
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+{% if error_message  %}
+<script>
+  Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: "{{ error_message }}",
+  showClass: {
+    popup: 'animate__animated animate__zoomIn'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__zoomOut'
+  },
+  iconHtml: '<i class="fas fa-times-circle animate__animated animate__bounce"></i>',
+  showConfirmButton: true,
+  confirmButtonText: 'OK',
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.href = "/login";
+  }
+});
+</script>
+
+{% elif success_message %}
+<script>
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: "{{ success_message }}",
+    showClass: {
+      popup: 'animate__animated animate__zoomIn'
+    },
+    hideClass: {
+      popup: 'animate__animated animate__zoomOut'
+    },
+    iconHtml: '<i class="fas fa-check-circle animate__animated animate__bounce"></i>',
+    showConfirmButton: true,
+    confirmButtonText: 'OK',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "/";
+    }
+  });
+</script>
+
+
+{% endif %}
+
+{% endblock main_content %}
 

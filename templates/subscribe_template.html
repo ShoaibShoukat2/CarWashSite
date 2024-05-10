@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Subscription
+{% endblock title %}
+{% block main_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Subscription Status</h2>
+            {% if subscription_status == "success" %}
+                <div class="alert alert-success" role="alert">
+                    Your subscription was successful! You will be redirected to the subscription page shortly.
+                </div>
+            {% elif subscription_status == "error" %}
+                <div class="alert alert-danger" role="alert">
+                    There was an error processing your subscription. Please try again later.
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    Processing your subscription request...
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

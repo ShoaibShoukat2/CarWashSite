@@ -14,8 +14,16 @@ urlpatterns = [
     path('blog-news/',blog,name="blog-page"),
     path('add-comment/<int:pk>/',add_comment,name="addblog-page"),
     path('FAQ/',FAQ_Function,name="faq-page"),
-    path('schedule/',Schedule,name="scheduling-page")
+    path('schedule/',schedule_appointment,name="scheduling-page"),
+    path('profile/',Profile,name="profile-page"),
+    path('subscribe/',Subscribe,name="subscription-details-page"),
+    path('success/',Success,name="success-page"),
+    path('error/',Error,name="error-page"),
+    path('admin-login/',AdminLogin,name="adminlogin-page"),
+    # Dashboard urls
+    path('dashboard/',Dashboard,name="Dashboard-Page"),
+    path('addblog/',Addblog,name="addblog-Page"),
+    path('addblog-success/',adminsuccess,name="addblogsuccess-Page"),
+    path('appointments/',Appointments,name="appoinetments-Page")
+
 ]
-
-
-

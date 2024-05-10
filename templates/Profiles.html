@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}
+Users Profile
+{% endblock title %}
+{% load static %}
+
+
+
+{% block main_content %}
+
+
+
+<section class="vh-100">
+    <div class="container py-5">
+        <div class="row">
+            <aside class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Operations</h5>
+                        <!-- Add your sidebar content here -->
+                        <ul class="list-group">
+                            <a href="/profiles">
+                                <li class="list-group-item">Dashboard</li>
+                            </a>
+                         <a href="">
+                            <li class="list-group-item">Appointment</li>
+                         </a>
+                            <!-- Add more sidebar options as needed -->
+                        </ul>
+                        
+                    </div>
+                </div>
+            </aside>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">User Profiles</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Subscription</th>
+                                        <th>Price</th>
+                                        <th>Package</th>
+                                        <th>Vehicle</th>
+                                        <th>Payment Method</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for profile in profiles %}
+                                    <tr>
+                                        <td>{{ profile.user_name }}</td>
+                                        <td>{{ profile.user_email }}</td>
+                                        <td>{{ profile.subscription }}</td>
+                                        <td>${{ profile.price }}/month</td>
+                                        <td>{{ profile.package }}</td>
+                                        <td>{{ profile.vehicle }}</td>
+                                        <td>Stripe</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

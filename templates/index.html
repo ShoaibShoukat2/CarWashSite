@@ -99,6 +99,7 @@
               <li><a href="/blog-news">Blog & News</a></li>
               <li><a href="/FAQ">FAQ</a></li>
               <li><a href="/schedule">Schedulig</a></li>
+              <li><a href="/admin-login">Admin</a></li>
               
             </ul>
           </li>
@@ -177,7 +178,6 @@
                   </a>
                   <div class="container" style="margin-bottom: 30px;">
                     <h3 class="text-center" style="font-weight: bold;">{{car.name}}</h3>
-
                   </div>
               </div>
               {% endfor %}
@@ -217,11 +217,37 @@
     </div>
 </section>
 
-  
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+{% if error_message %}
+<script>
+  Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: "{{ error_message }}",
+  showClass: {
+    popup: 'animate__animated animate__zoomIn'
+  },
+  hideClass: {
+    popup: 'animate__animated animate__zoomOut'
+  },
+  iconHtml: '<i class="fas fa-times-circle animate__animated animate__bounce"></i>',
+  showConfirmButton: true,
+  confirmButtonText: 'OK',
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.href = "/login";
+  }
+});
+</script>
+
+{% endif %}
+
+
 </section>
-
-
-
 
 
      <!-- External link for Bootstrap CSS and JS -->
@@ -231,73 +257,65 @@
 
 <script>
   $(document).ready(function() {
-
-    function updateCarDetailsOnPage(carDetails) {
-    // Assuming carDetails is the response object you receive from the AJAX call
-    var subData = carDetails.sub_data;
-
-    // Clear existing subscription plans
-    $(".subscription-plans").empty();
-
-    // Loop through each subscription type
-    $.each(subData, function(subscriptionType, plans) {
-        // Create a container for the subscription plans of this type
-        var subscriptionContainer = $('<div class="col-md-4 mt-2"></div>');
-
-        // Add a header for the subscription type
-        subscriptionContainer.append(`<h4>${subscriptionType}</h4>`);
-
-        // Loop through each plan under the current subscription type
-        $.each(plans, function(index, plan) {
-            // Check if there are any descriptions available
-            var description = plan.descriptions.length > 0 ? plan.descriptions[0].description : "No description available";
-            var price = plan.descriptions.length > 0 ? "$" + plan.descriptions[0].price : "Price not available";
-
-            // Create HTML for subscription plan
-            var planHtml = `
-
-                <div class="card border-white bg-transparent">
-                    <div class="card-header border-transparent">
-                        ${plan.name}
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">${subscriptionType}</h5>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Price: ${price}</li>
-                            <li class="list-group-item">Description: ${description}</li>
-                        </ul>
-                        <div class="card-footer border-transparent">
-                            <a href="#" class="btn btn-dark w-100">Subscribe</a>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Append the plan HTML to the subscription container
-            subscriptionContainer.append(planHtml);
-        });
-
-        // Append the subscription container to the main container
-        $(".subscription-plans").append(subscriptionContainer);
-    });
-}
-
-      // Function to update car details
+  
+      // Function to update car details on the page
+      function updateCarDetailsOnPage(carDetails) {
+          var subData = carDetails.sub_data;
+  
+          $(".subscription-plans").empty();
+  
+          $.each(subData, function(subscriptionType, plans) {
+              var subscriptionContainer = $('<div class="col-md-4 mt-2"></div>');
+              subscriptionContainer.append(`<h4>${subscriptionType}</h4>`);
+  
+              $.each(plans, function(index, plan) {
+                  var description = plan.descriptions.length > 0 ? plan.descriptions[0].description : "No description available";
+                  var price = plan.descriptions.length > 0 ? "$" + plan.descriptions[0].price : "Price not available";
+                  var subscriptionId = plan.descriptions.length > 0 ? plan.descriptions[0].subscription_id : "Subscription ID not available";
+  
+                  // Modify planHtml to include data attributes for IDs
+                  var planHtml = `
+                      <div class="card border-white bg-transparent" 
+                           data-subscription-id="${subscriptionId}"
+                           data-package-id="${plan.id}"
+                           data-vehicle-id="${carDetails.vehicle.id}">
+                          <div class="card-header border-transparent">
+                              ${plan.name}
+                          </div>
+                          <div class="card-body">
+                              <h5 class="card-title">${subscriptionType}</h5>
+                              <ul class="list-group list-group-flush">
+                                  <li class="list-group-item">Price: ${price}</li>
+                                  <li class="list-group-item">Description: ${description}</li>
+                              </ul>
+                              <div class="card-footer border-transparent">
+                                  <a href="#" class="btn btn-dark w-100 subscribe-btn">Subscribe</a>
+                              </div>
+                          </div>
+                      </div>
+                  `;
+  
+                  subscriptionContainer.append(planHtml);
+              });
+  
+              $(".subscription-plans").append(subscriptionContainer);
+          });
+      }
+  
+      // Function to update car details via AJAX
       function updateCarDetails(carId) {
           $.ajax({
               url: '/subscriptions/car-details/' + carId,
               type: 'GET',
               beforeSend: function(xhr) {
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-        },
-
-        dataType: 'json', // Ensure that jQuery parses the response as JSON
-    contentType: 'application/json', // Specify the Content-Type header
-    accepts: {
-        json: 'application/json' // Specify the Accept header
-    },
+                  xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+              },
+              dataType: 'json',
+              contentType: 'application/json',
+              accepts: {
+                  json: 'application/json'
+              },
               success: function(response) {
-                  // Assuming you have a function to update the car details on the page
                   updateCarDetailsOnPage(response);
               },
               error: function(xhr, status, error) {
@@ -306,42 +324,57 @@
           });
       }
 
+  
+      // Click event for subscribe button
+      $(document).on("click", ".subscribe-btn", function(event) {
+          event.preventDefault();
+  
+          var subscriptionId = $(this).closest('.card').data('subscription-id');
+          var packageId = $(this).closest('.card').data('package-id');
+          var vehicleId = $(this).closest('.card').data('vehicle-id');
+  
+          // Redirect to subscription URL with IDs
+          window.location.href = `/subscribe?subscription_id=${subscriptionId}&package_id=${packageId}&vehicle_id=${vehicleId}`;
+      });
+  
+      // Helper function to get CSRF token from cookies
       function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+  
       // Function to get the carId of the currently active carousel item
       function getActiveCarId() {
           return $(".carousel-item.active").find("img").data("car-id");
       }
-
+  
       // Get the carId of the initially active carousel item and fetch its details
       var initialCarId = getActiveCarId();
       updateCarDetails(initialCarId);
-
+  
       // Click event for carousel items
       $(".carousel-item").click(function() {
           var carId = $(this).find("img").data("car-id");
           updateCarDetails(carId);
       });
-
+  
       // Click event for next button
       $(".carousel-control-next").click(function() {
           var nextItem = $(".carousel-item.active").next();
           var carId = nextItem.length ? nextItem.find("img").data("car-id") : $(".carousel-item:first").find("img").data("car-id");
           updateCarDetails(carId);
       });
-
+  
       // Click event for previous button
       $(".carousel-control-prev").click(function() {
           var prevItem = $(".carousel-item.active").prev();
@@ -349,8 +382,8 @@
           updateCarDetails(carId);
       });
   });
-</script>
-
+  </script>
+  
     <!-- reviews -->
     <section id="services" class="services">
       <div class="container">

@@ -92,7 +92,6 @@ class Blog(models.Model):
 
 
 
-
 class Comments(models.Model):
     blog_id = models.ForeignKey(Blog,on_delete=models.CASCADE,default='')
     name = models.CharField(max_length=255,default='')
@@ -102,5 +101,32 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class UserProfile(models.Model):
+    user_id = models.ForeignKey(Signup, on_delete=models.CASCADE, null=True, blank=True)
+    user_name = models.CharField(max_length=100)
+    user_email = models.EmailField(max_length=100)
+    subscription = models.CharField(max_length=100, null=True, blank=True)
+    package = models.CharField(max_length=100, null=True, blank=True)
+    vehicle = models.CharField(max_length=100, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return self.user_name 
+
+
+class AppoitmentSchedule(models.Model):
+    user_id = models.ForeignKey(Signup, on_delete=models.CASCADE, null=True, blank=True)
+    location = models.CharField(max_length=100)
+    date = models.DateField()
+
+
+    def __str__(self):
+
+        return f"Appointment at {self.location} on {self.date}"
+
+
 
 

@@ -4,7 +4,11 @@ from django.contrib.auth.hashers import make_password ,check_password # Import m
 from .models import *
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
-
+import stripe
+from django.urls import reverse
+from django.conf import settings
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
 # Create your views here.
 
 
@@ -81,7 +85,6 @@ def signup(request):
 
 
 
-
 def SubscriptionPage(request):
 
     vehicle_data = Vehicle.objects.all()
@@ -114,7 +117,10 @@ def Details(request, id):
                 for dp in description_prices:
                     descriptions.append({
                         'description': dp.description,
-                        'price': dp.price
+                        'price': dp.price,
+                        'package_id': package.id,
+                        'subscription_id': data.id,
+                        'vehicle_id': vehicle.id
                     })
 
                 subscription_packages.append({
@@ -137,12 +143,6 @@ def Details(request, id):
         return JsonResponse(context)
     except Vehicle.DoesNotExist:
         return JsonResponse({'error': 'Vehicle not found'}, status=404)
-
-
-
-
-
-
 
 
 
@@ -180,8 +180,6 @@ def Logout(request):
 
 
     return redirect('index-page')
-
-
 
 
 def Guide(request):
@@ -241,16 +239,233 @@ def add_comment(request, pk):
 
 
 
-
-
 def FAQ_Function(request):
 
     return render(request,'FAQ.html')
 
 
+def schedule_appointment(request):
+    if request.method == 'POST':
+        location = request.POST.get('location')
+        date = request.POST.get('date')
+        
+        # Get the user_id from the session
+        user_id = request.session.get('user_id')
+        
+        # If user_id exists in session, try to get the user
+        if user_id:
+            try:
+                user = Signup.objects.get(id=user_id)
+                # If user is found, create the appointment
+                appointment = AppoitmentSchedule.objects.create(
+                    user_id=user,
+                    location=location,
+                    date=date
+                )
+                # Optionally, you can add a success message
+                return render(request, 'Scheduling.html', {'success_message': 'Appointment data submitted successfully.'})
+                return redirect('/')  # Redirect to a success page
+            except Signup.DoesNotExist:
+                pass  # Handle the case where the user does not exist
+        # If user_id does not exist in session or user is not found, render the error message
+        return render(request, 'Scheduling.html', {'error_message': 'Please log in first.'})
+    else:
+        return render(request, 'Scheduling.html')
 
 
-def Schedule(request):
-    return render(request,'Scheduling.html')
+def Profile(request):
+
+    # Get user ID from session
+    user_id = request.session.get('user_id')
+
+    # Fetch user's subscription details
+    try:
+        user_profile = UserProfile.objects.get(user_id=user_id)
+    except UserProfile.DoesNotExist:
+        user_profile = None
+
+
+    return render(request, 'profile.html', {'user_profile': user_profile})
+
+
+
+def Subscribe(request):
+
+    context = {
+
+    }
+    if request.method == 'GET': 
+        subscription_id = request.GET.get('subscription_id')
+        package_id = request.GET.get('package_id')
+        vehicle_id = request.GET.get('vehicle_id')
+
+        try:
+            # Retrieve necessary data from the database
+            vehicle_data = Vehicle.objects.get(id=vehicle_id)
+            subscription_data = SubscrationDuration.objects.get(id=subscription_id)
+            package_data = Packages.objects.get(id=package_id)
+            description_price = DescriptionPrice.objects.get(vehicle_id=vehicle_data, subscription_id=subscription_data, package_id=package_data)
+
+            # Get user information from session
+            user_id  = request.session.get('user_id')
+            user_name = request.session.get('user_name')
+            user_email = request.session.get('user_email')
+
+
+            if not user_email:
+                context['error_message'] = "Please login first"
+                return render(request,'index.html',context)
+
+            # Check if the user exists in the Signup database
+            try:
+                user = Signup.objects.get(id=user_id)
+            except Signup.DoesNotExist:
+                context['error_message'] = "User does not exist"
+                return render(request,'index.html',context)
+
+
+            # Set your Stripe API key
+            stripe.api_key = settings.STRIPE_API_KEY
+
+            # Create metadata to be passed to Stripe as JSON
+            metadata = {
+                'vehicle_name': vehicle_data.name,
+                'package_name': package_data.name,
+                'subscription_name': subscription_data.subscription_name,
+                'user_name': user_name,
+                'user_email': user_email,
+            }
+
+
+            # Create a Stripe Checkout session
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': f"{subscription_data.subscription_name} - Vehicle: {vehicle_data.name} - Package: {package_data.name}",
+                        },
+                        'unit_amount': int(description_price.price * 100),  # Convert price to cents
+                        'recurring': {
+                            'interval': 'month',    
+                        },
+                    },
+                    'quantity': 1,
+                }],
+
+
+
+                mode='subscription',
+                success_url = request.build_absolute_uri(reverse('success-page')),
+                cancel_url = request.build_absolute_uri(reverse('error-page')),   # Redirect to cancel page
+                client_reference_id=f"{subscription_id}-{user_email}",  # Unique identifier for metadata retrieval
+                metadata=metadata,  # Pass metadata to Stripe
+            )
+
+             # Save data into UserProfile model after successful payment
+            UserProfile.objects.create(
+                user_id=user,
+                user_name=user_name,
+                user_email=user_email,
+                subscription=subscription_data.subscription_name,
+                package=package_data.name,
+                vehicle=vehicle_data.name,
+                price=description_price.price
+            )
+
+
+            return redirect(session.url)
+
+        except (Vehicle.DoesNotExist, SubscrationDuration.DoesNotExist, Packages.DoesNotExist, DescriptionPrice.DoesNotExist) as e:
+            print("Error:", e)
+            return render(request, 'subscribe_template.html', {'error_message': 'Error processing subscription'})
+
+    return render(request, 'subscribe_template.html')
+
+
+
+
+def Success(request):
+
+
+    return render(request,'success_page.html')
+
+
+
+def Error(request):
+
+
+    return render(request,'error_page.html')
+
+
+
+
+# Dashboard Functions
+
+
+
+def Dashboard(request):
+
+    user_profiles = UserProfile.objects.all()
+
+    
+    return render(request,'Dashboard/admin.html', {'user_profiles': user_profiles})
+
+
+def AdminLogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            # Authentication successful, login the user
+            auth_login(request, user)
+            # Redirect to the admin page or any other page you want
+            return redirect('Dashboard-Page')  # Assuming 'admin_dashboard' is the name of the URL pattern for the admin page
+        else:
+            # Authentication failed, display an error message
+            error_message = "Invalid username or password"
+            return render(request, 'adminlogin.html', {'error_message': error_message})
+    else:
+        return render(request, 'adminlogin.html')
+
+
+
+def Addblog(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        category_id = request.POST.get('category')
+        
+        if title and description and category_id:
+            category = Category.objects.get(pk=category_id)
+            # Assuming you have an Admin object associated with the admin_id
+            admin = Admin.objects.get(pk=1)
+            Blog.objects.create(admin=admin, title=title, description=description, category=category)
+            return redirect('addblogsuccess-Page')  # Redirect to a success page after adding the blog
+        else:
+            # Handle invalid form data here
+            pass
+    else:
+        categories = Category.objects.all()
+        return render(request, 'Dashboard/AddBlog.html', {'categories': categories})
+
+        
+
+
+
+
+def adminsuccess(request):
+    return render(request,'Dashboard/success.html')
+
+
+
+
+def Appointments(request):
+
+    appointments = AppoitmentSchedule.objects.all()
+
+    return render(request,'Dashboard/Appointments.html',{'appointments': appointments})
 
 
