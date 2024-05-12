@@ -13,6 +13,7 @@ import qrcode
 from io import BytesIO
 from django.http import FileResponse
 import os
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -87,7 +88,6 @@ def signup(request):
                 context['redirect_url'] = 'login'
 
     return render(request, 'signup.html', context)
-
 
 
 
