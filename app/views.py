@@ -9,11 +9,17 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
+import qrcode
+from io import BytesIO
+from django.http import FileResponse
+import os
+
 # Create your views here.
 
 
 
 def index(request):
+
 
     vehicle_data = Vehicle.objects.all()
 
@@ -81,6 +87,7 @@ def signup(request):
                 context['redirect_url'] = 'login'
 
     return render(request, 'signup.html', context)
+
 
 
 
@@ -291,9 +298,8 @@ def Profile(request):
 
 def Subscribe(request):
 
-    context = {
+    context = {}
 
-    }
     if request.method == 'GET': 
         subscription_id = request.GET.get('subscription_id')
         package_id = request.GET.get('package_id')
@@ -311,7 +317,6 @@ def Subscribe(request):
             user_name = request.session.get('user_name')
             user_email = request.session.get('user_email')
 
-
             if not user_email:
                 context['error_message'] = "Please login first"
                 return render(request,'index.html',context)
@@ -323,47 +328,7 @@ def Subscribe(request):
                 context['error_message'] = "User does not exist"
                 return render(request,'index.html',context)
 
-
-            # Set your Stripe API key
-            stripe.api_key = settings.STRIPE_API_KEY
-
-            # Create metadata to be passed to Stripe as JSON
-            metadata = {
-                'vehicle_name': vehicle_data.name,
-                'package_name': package_data.name,
-                'subscription_name': subscription_data.subscription_name,
-                'user_name': user_name,
-                'user_email': user_email,
-            }
-
-
-            # Create a Stripe Checkout session
-            session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': f"{subscription_data.subscription_name} - Vehicle: {vehicle_data.name} - Package: {package_data.name}",
-                        },
-                        'unit_amount': int(description_price.price * 100),  # Convert price to cents
-                        'recurring': {
-                            'interval': 'month',    
-                        },
-                    },
-                    'quantity': 1,
-                }],
-
-
-
-                mode='subscription',
-                success_url = request.build_absolute_uri(reverse('success-page')),
-                cancel_url = request.build_absolute_uri(reverse('error-page')),   # Redirect to cancel page
-                client_reference_id=f"{subscription_id}-{user_email}",  # Unique identifier for metadata retrieval
-                metadata=metadata,  # Pass metadata to Stripe
-            )
-
-             # Save data into UserProfile model after successful payment
+            # Save data into UserProfile model after successful payment
             UserProfile.objects.create(
                 user_id=user,
                 user_name=user_name,
@@ -375,7 +340,16 @@ def Subscribe(request):
             )
 
 
-            return redirect(session.url)
+            # Path to your QR code PNG file
+            qr_code_path = "D:/Salman_Projects/CarWash/main/static/img/QRCode.jpeg"
+
+            # Check if the file exists
+            if os.path.exists(qr_code_path):
+                # Serve the PNG file as response
+                return FileResponse(open(qr_code_path, 'rb'), content_type='image/png')
+            else:
+                # If the file does not exist, return an error message
+                return HttpResponse("QR code image not found", status=404)
 
         except (Vehicle.DoesNotExist, SubscrationDuration.DoesNotExist, Packages.DoesNotExist, DescriptionPrice.DoesNotExist) as e:
             print("Error:", e)
@@ -384,21 +358,15 @@ def Subscribe(request):
     return render(request, 'subscribe_template.html')
 
 
-
-
 def Success(request):
 
-
     return render(request,'success_page.html')
-
 
 
 def Error(request):
 
 
     return render(request,'error_page.html')
-
-
 
 
 # Dashboard Functions
@@ -451,9 +419,6 @@ def Addblog(request):
         categories = Category.objects.all()
         return render(request, 'Dashboard/AddBlog.html', {'categories': categories})
 
-        
-
-
 
 
 def adminsuccess(request):
@@ -467,5 +432,6 @@ def Appointments(request):
     appointments = AppoitmentSchedule.objects.all()
 
     return render(request,'Dashboard/Appointments.html',{'appointments': appointments})
+
 
 

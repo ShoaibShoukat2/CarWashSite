@@ -20,8 +20,12 @@ Subscription
                 <div class="alert alert-info" role="alert">
                     Processing your subscription request...
                 </div>
+                {% if qr_code %}
+                    <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+                {% endif %}
             {% endif %}
         </div>
     </div>
 </div>
 {% endblock main_content %}
+
