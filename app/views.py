@@ -9,18 +9,97 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
-import qrcode
+import qrcode   
 from io import BytesIO
 from django.http import FileResponse
 import os
 from django.http import HttpResponse
+import requests
+
+from urllib.parse import urlparse, parse_qs
+
 
 # Create your views here.
+
+def Gateway(request):       
+    context = {}    
+
+    # Parse the URL to extract query parameters
+    query_params = request.META.get('QUERY_STRING', '')
+    parsed_query_params = parse_qs(query_params)
+
+    # Extract the parameters you need
+    subscription_id = parsed_query_params.get('subscription_id', [''])[0]
+    package_id = parsed_query_params.get('package_id', [''])[0]
+    vehicle_id = parsed_query_params.get('vehicle_id', [''])[0]
+
+
+    try:
+        # Retrieve necessary data from your database
+        vehicle_data = Vehicle.objects.get(id=vehicle_id)
+        subscription_data = SubscrationDuration.objects.get(id=subscription_id)
+        package_data = Packages.objects.get(id=package_id)
+        description_price = DescriptionPrice.objects.get(
+            vehicle_id=vehicle_data, 
+            subscription_id=subscription_data, 
+            package_id=package_data
+        )       
+
+        user_id = request.session.get('user_id')
+        user_name = request.session.get('user_name')
+        user_email = request.session.get('user_email')
+
+
+
+        # Add retrieved data to context
+        context['user_id'] = user_id
+        context['user_name'] = user_name
+        context['user_email'] = user_email
+        context['subscription'] = subscription_data.subscription_name
+        context['package'] = package_data.name
+        context['vehicle'] = vehicle_data.name
+        context['price'] = description_price.price
+        context['vehicle_id'] = vehicle_id
+
+
+        if not user_email:
+            context['error_message'] = "Please login first"
+
+
+    except (Vehicle.DoesNotExist, SubscrationDuration.DoesNotExist, Packages.DoesNotExist, DescriptionPrice.DoesNotExist):
+        context['error_message'] = "Facing some issues"
+
+    return render(request, 'gateway.html', context)
+
+
+
+
+
+
+def verify_userprofile(request):
+    if request.method == 'GET':
+        email = request.session.get('user_email')
+
+        if email:
+            try:
+                # Check if a user with the given email exists in UserProfile
+                user_profile = UserProfile.objects.get(user_email=email)
+                return JsonResponse({'success': True, 'email': email})
+            except UserProfile.DoesNotExist:
+                # User with the given email does not exist
+                return JsonResponse({'success': False, 'error': 'User profile not found'}, status=404)
+        else:
+            return JsonResponse({'success': False, 'error': 'Email not found in session'}, status=400)
+
+
+
+
+
+
 
 
 
 def index(request):
-
 
     vehicle_data = Vehicle.objects.all()
 
@@ -30,9 +109,6 @@ def index(request):
     }
 
     return render(request,'index.html',context)
-
-
-
 
 
 def signup(request):
@@ -89,9 +165,6 @@ def signup(request):
 
     return render(request, 'signup.html', context)
 
-
-
-
 def SubscriptionPage(request):
 
     vehicle_data = Vehicle.objects.all()
@@ -103,8 +176,6 @@ def SubscriptionPage(request):
 
  
     return render(request,'sub_category.html',context)
-
-
 
 
 def Details(request, id):
@@ -152,7 +223,6 @@ def Details(request, id):
         return JsonResponse({'error': 'Vehicle not found'}, status=404)
 
 
-
 def login(request):
     context = {}  # Initialize an empty context dictionary
     if request.method == 'POST':
@@ -177,8 +247,6 @@ def login(request):
 
     return render(request, 'login.html',context)
 
-
-
 def Logout(request):
     
     del request.session['user_email']
@@ -188,16 +256,11 @@ def Logout(request):
 
     return redirect('index-page')
 
-
 def Guide(request):
     return render(request,'Guide.html')
 
-
-
 def contact(request):
     return render(request,'contact.html')
-
-
 
 def blog(request):
 
@@ -226,7 +289,6 @@ def blog(request):
         
         })
 
-
 def add_comment(request, pk):
     blog = Blog.objects.get(pk=pk)
 
@@ -244,12 +306,9 @@ def add_comment(request, pk):
 
     return redirect('blog-page')
 
-
-
 def FAQ_Function(request):
 
     return render(request,'FAQ.html')
-
 
 def schedule_appointment(request):
     if request.method == 'POST':
@@ -279,7 +338,6 @@ def schedule_appointment(request):
     else:
         return render(request, 'Scheduling.html')
 
-
 def Profile(request):
 
     # Get user ID from session
@@ -293,8 +351,6 @@ def Profile(request):
 
 
     return render(request, 'profile.html', {'user_profile': user_profile})
-
-
 
 def Subscribe(request):
 
@@ -321,6 +377,7 @@ def Subscribe(request):
                 context['error_message'] = "Please login first"
                 return render(request,'index.html',context)
 
+
             # Check if the user exists in the Signup database
             try:
                 user = Signup.objects.get(id=user_id)
@@ -343,6 +400,8 @@ def Subscribe(request):
             # Path to your QR code PNG file
             qr_code_path = "D:/Salman_Projects/CarWash/main/static/img/QRCode.jpeg"
 
+
+
             # Check if the file exists
             if os.path.exists(qr_code_path):
                 # Serve the PNG file as response
@@ -356,6 +415,10 @@ def Subscribe(request):
             return render(request, 'subscribe_template.html', {'error_message': 'Error processing subscription'})
 
     return render(request, 'subscribe_template.html')
+
+
+
+
 
 
 def Success(request):

@@ -16,7 +16,17 @@ urlpatterns = [
     path('FAQ/',FAQ_Function,name="faq-page"),
     path('schedule/',schedule_appointment,name="scheduling-page"),
     path('profile/',Profile,name="profile-page"),
+
+
     path('subscribe/',Subscribe,name="subscription-details-page"),
+    path('gateway/',Gateway,name="gateway-page"),
+    path('verify-user/',verify_userprofile,name="verifyprofile-page"),
+
+
+
+
+
+
     path('success/',Success,name="success-page"),
     path('error/',Error,name="error-page"),
     path('admin-login/',AdminLogin,name="adminlogin-page"),

@@ -50,18 +50,18 @@
     color: #f7b733; /* Change the color of the stars */
 }
 .step {
-            position: relative;
-            padding-left: 20px; /* Adjust this value to control the space between the number and text */
-            text-align: justify;
-            font-size: 20px; /* Adjust this value to increase/decrease text size */
-        }
+    position: relative;
+    padding-left: 20px; /* Adjust this value to control the space between the number and text */
+    text-align: justify;
+    font-size: 20px; /* Adjust this value to increase/decrease text size */
+}
 
-        .step span {
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: #8360c3; /* Color for icon */
-        }
+.step span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #8360c3; /* Color for icon */
+}
 
 </style>
 
@@ -334,7 +334,7 @@
           var vehicleId = $(this).closest('.card').data('vehicle-id');
   
           // Redirect to subscription URL with IDs
-          window.location.href = `/subscribe?subscription_id=${subscriptionId}&package_id=${packageId}&vehicle_id=${vehicleId}`;
+          window.location.href = `/gateway?subscription_id=${subscriptionId}&package_id=${packageId}&vehicle_id=${vehicleId}`;
       });
   
       // Helper function to get CSRF token from cookies
@@ -352,6 +352,7 @@
           }
           return cookieValue;
       }
+      
   
       // Function to get the carId of the currently active carousel item
       function getActiveCarId() {
