@@ -6,7 +6,6 @@ Checkout
 {% load static %}
 
 {% block main_content %}
-<!-- Include Bootstrap CSS -->
 <div class="container-fluid" style="margin-top: 50px;">
   <div class="row">
     <!-- Main Content for Barcode -->
@@ -34,16 +33,19 @@ Checkout
         </button>
       </div>
       <div class="modal-body text-center">
-        <img src="{% static 'img/QRCode.jpeg' %}" alt="Barcode" style="width: 80%;">
+        <img src="{% static 'img/QRCode.jpeg' %}" alt="Barcode" style="width: 80%;" id="barcodeImage">
+        <br>
+        <a href="{% static 'img/QRCode.jpeg' %}" download="QRCode.jpeg" class="btn btn-primary mt-3">
+          <i class="fas fa-download"></i> Download QR Code
+        </a>
       </div>
     </div>
   </div>
 </div>
 
-
-
-<!-- Include Bootstrap JS and jQuery -->
+<!-- Include jQuery and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -52,8 +54,6 @@ $(document).ready(function() {
   });
 });
 </script>
-
-
 
 {% endblock main_content %}
 
