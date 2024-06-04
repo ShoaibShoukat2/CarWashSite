@@ -1,0 +1,63 @@
+{% extends 'Dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+  <h2>List of Blogs</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Comments</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for blog in blogs %}
+      <tr>
+        <td>{{ blog.title }}</td>
+        <td>{{ blog.description }}</td>
+        <td>{{ blog.category.name }}</td>
+        <td>
+          <ul>
+            {% for comment in blog.comments_set.all %}
+            <li>{{ comment.name }}: {{ comment.comments }}</li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td>
+          <a href="/blog-delete/{{blog.id}}" class="btn btn-danger delete-btn" data-blog-id="{{ blog.id }}">
+            <i class="fas fa-trash"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script>
+    $(document).ready(function() {
+      $('.delete-btn').click(function(e) {
+        e.preventDefault();
+        var blogId = $(this).data('blog-id');
+        var deleteUrl = $(this).attr('href');
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You will not be able to recover this blog!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = deleteUrl;
+          }
+        });
+      });
+    });
+  </script>
+{% endblock main_content %}

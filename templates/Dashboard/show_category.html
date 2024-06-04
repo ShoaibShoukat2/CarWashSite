@@ -1,0 +1,68 @@
+{% extends 'Dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">All Categories</h2>
+                    <ul class="list-group">
+                        {% for category in categories %}
+                        <li class="list-group-item">{{ category.name }}  <button onclick="confirmDelete({{ category.id }})" class="btn btn-danger btn-sm float-right">Delete</button></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Add New Category</h2>
+                    <form method="post" action="/add-category/">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name">Category Name:</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Category Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin">Select Admin:</label>
+                            <select name="admin" class="form-control" id="admin" required>
+                                {% for admin in admins %}
+                                    <option value="{{ admin.id }}">{{ admin.user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add SweetAlert library CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    // Function to handle category deletion confirmation
+    function confirmDelete(categoryId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, redirect to delete URL
+                window.location.href = `/delete-category/${categoryId}/`;
+            }
+        });
+    }
+</script>
+
+{% endblock main_content %}

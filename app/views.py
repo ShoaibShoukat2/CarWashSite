@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password ,check_password # Import make_password
 from .models import *
@@ -98,7 +98,6 @@ def verify_userprofile(request):
 
 
 
-
 def index(request):
 
     vehicle_data = Vehicle.objects.all()
@@ -124,6 +123,7 @@ def signup(request):
         vehicle_type = request.POST.get('vehicle_type')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
+
 
         # Check if the email already exists
         if Signup.objects.filter(email=email).exists():
@@ -164,6 +164,9 @@ def signup(request):
                 context['redirect_url'] = 'login'
 
     return render(request, 'signup.html', context)
+
+
+
 
 def SubscriptionPage(request):
 
@@ -224,7 +227,7 @@ def Details(request, id):
 
 
 def login(request):
-    context = {}  # Initialize an empty context dictionary
+    context = {}  
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -495,6 +498,65 @@ def Appointments(request):
     appointments = AppoitmentSchedule.objects.all()
 
     return render(request,'Dashboard/Appointments.html',{'appointments': appointments})
+
+
+
+def delete_Appointments(request,id):
+
+    appointment = get_object_or_404(AppoitmentSchedule, id=id)
+    appointment.delete()
+    return redirect('appoinetments-Page') 
+
+
+
+def blog_data(request):
+    categories = Category.objects.all()
+    blogs = Blog.objects.all()
+    comments = Comments.objects.all()
+    return render(request, 'Dashboard/show_blogs.html', {'categories': categories, 'blogs': blogs, 'comments': comments})
+
+
+
+
+def blog_delete(request, id):
+    # Get the blog object
+    blog = get_object_or_404(Blog, id=id)
+    
+    # Delete the blog
+    blog.delete()
+    
+    # Redirect to the blog list page
+    return redirect('blogs-data')
+
+
+
+def add_category(request):
+    categories = Category.objects.all()
+    admins = Admin.objects.all()  # Fetch all admin users
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        admin_id = request.POST.get('admin')  # Get the selected admin ID from the form
+        admin = Admin.objects.get(pk=admin_id)  # Get the admin object
+        
+        # Create the category with the specified admin
+        Category.objects.create(name=name, admin=admin)
+        
+        return redirect('add-category')
+    
+    return render(request, 'Dashboard/show_category.html', {'categories': categories, 'admins': admins})
+
+
+
+
+
+def delete_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    
+    category.delete()
+    
+    return redirect('add-category')  
+
 
 
 

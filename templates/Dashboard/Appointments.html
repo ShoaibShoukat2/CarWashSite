@@ -13,6 +13,7 @@
         <th>Email</th>
         <th>Location</th>
         <th>Date</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -22,12 +23,45 @@
         <td>{{ appointment.user_id.email }}</td>
         <td>{{ appointment.location }}</td>
         <td>{{ appointment.date }}</td>
+        <td>
+          <a href="/appointments/{{ appointment.id }}/delete" class="btn btn-danger btn-sm delete-appointment">
+            <i class="fas fa-trash"></i>
+          </a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 
-{% endblock main_content %}
+<!-- Include SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+<script>
+  // Add event listener to delete appointment links
+  document.querySelectorAll('.delete-appointment').forEach(link => {
+    link.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default link action
+      const url = this.getAttribute('href'); // Get delete URL
+      // Display SweetAlert confirmation dialog
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // If user confirms, redirect to delete URL
+          window.location.href = url;
+        }
+      });
+    });
+  });
+</script>
+
+
+{% endblock main_content %}
 

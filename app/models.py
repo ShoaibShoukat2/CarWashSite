@@ -104,6 +104,7 @@ class Comments(models.Model):
 
 
 
+
 class UserProfile(models.Model):
     user_id = models.ForeignKey(Signup, on_delete=models.CASCADE, null=True, blank=True)
     user_name = models.CharField(max_length=100)
