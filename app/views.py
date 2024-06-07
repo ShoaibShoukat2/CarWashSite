@@ -15,8 +15,9 @@ from django.http import FileResponse
 import os
 from django.http import HttpResponse
 import requests
-
+from datetime import datetime, time
 from urllib.parse import urlparse, parse_qs
+
 
 
 # Create your views here.
@@ -316,30 +317,50 @@ def FAQ_Function(request):
 def schedule_appointment(request):
     if request.method == 'POST':
         location = request.POST.get('location')
-        date = request.POST.get('date')
+        datetime_str = request.POST.get('datetime')  # Get the datetime string
+
+        # Parse the datetime string
+        appointment_datetime = parse_datetime(datetime_str)
         
-        # Get the user_id from the session
-        user_id = request.session.get('user_id')
+        # Define working hours start and end
+        start_working_hours = time(8, 30)  # 08:30 AM
+        end_working_hours = time(17, 30)   # 05:30 PM
         
-        # If user_id exists in session, try to get the user
-        if user_id:
-            try:
-                user = Signup.objects.get(id=user_id)
-                # If user is found, create the appointment
-                appointment = AppoitmentSchedule.objects.create(
-                    user_id=user,
-                    location=location,
-                    date=date
-                )
-                # Optionally, you can add a success message
-                return render(request, 'Scheduling.html', {'success_message': 'Appointment data submitted successfully.'})
-                return redirect('/')  # Redirect to a success page
-            except Signup.DoesNotExist:
-                pass  # Handle the case where the user does not exist
-        # If user_id does not exist in session or user is not found, render the error message
-        return render(request, 'Scheduling.html', {'error_message': 'Please log in first.'})
+        # Check if the appointment datetime is within working hours
+        if appointment_datetime is not None:
+            appointment_time = appointment_datetime.time()
+            if start_working_hours <= appointment_time <= end_working_hours:
+                # Get the user_id from the session
+                user_id = request.session.get('user_id')
+                
+                # If user_id exists in session, try to get the user
+                if user_id:
+                    try:
+                        user = Signup.objects.get(id=user_id)
+                        # If user is found, create the appointment
+                        appointment = AppointmentSchedule.objects.create(
+                            user_id=user,
+                            location=location,
+                            date=appointment_datetime  # Use the parsed datetime
+                        )
+                        # Optionally, you can add a success message
+                        return render(request, 'Scheduling.html', {'success_message': 'Appointment data submitted successfully.'})
+                        return redirect('/')  # Redirect to a success page
+                    except Signup.DoesNotExist:
+                        pass  # Handle the case where the user does not exist
+                # If user_id does not exist in session or user is not found, render the error message
+                return render(request, 'Scheduling.html', {'error_message': 'Please log in first.'})
+            else:
+                # Handle the case where the time is outside working hours
+                return render(request, 'Scheduling.html', {'error_message': 'Please select a time within working hours (08:30 AM - 05:30 PM).'})
+        else:
+            # Handle the case where the datetime is not parsed correctly
+            return render(request, 'Scheduling.html', {'error_message': 'Invalid date and time format.'})
     else:
         return render(request, 'Scheduling.html')
+
+
+
 
 def Profile(request):
 
