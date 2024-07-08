@@ -92,6 +92,9 @@ class Blog(models.Model):
 
 
 
+
+
+
 class Comments(models.Model):
     blog_id = models.ForeignKey(Blog,on_delete=models.CASCADE,default='')
     name = models.CharField(max_length=255,default='')
@@ -101,6 +104,7 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 
